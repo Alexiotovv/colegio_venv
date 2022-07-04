@@ -1,0 +1,2 @@
+# colegio_venv
+DjangoProject
