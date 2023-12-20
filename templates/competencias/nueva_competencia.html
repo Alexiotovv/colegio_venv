@@ -1,0 +1,19 @@
+{% extends 'base/home_newtemplate.html' %}
+{% block title %}Nueva Competencias{% endblock %}
+{% block active_compe %}active{% endblock %}
+{% block form %}
+
+	<form method="POST">
+		{% csrf_token %}
+		<h6>Nueva Competencias</h6>
+		<label for="">Nombre de Competencia</label>
+        {{form.nombre_competencia}}
+        <label for="">Nivel de Competencia</label>
+        {{form.nivel}}
+        <label for="">Orden de Competencia</label>
+        {{form.Orden}}
+
+        <br>
+        <button type="submit" class="btn btn-success">Guardar</button>
+	</form>
+{% endblock %}
