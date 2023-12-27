@@ -17,7 +17,8 @@ from colegio.Apps.Docente.models import Docente
 from colegio.Apps.PeriodoAcademico.models import PAcademico
 from colegio.Apps.Competencias.models import CompetenciaCurso
 from colegio.Apps.Pagos.models import Pagos
-from colegio.Apps.OtrasOpciones.views import FinalPrim, FinalSecun, calculo_promedio
+# from colegio.Apps.OtrasOpciones.views import FinalPrim, FinalSecun, calculo_promedio, numeros_a_letras
+from colegio.Apps.OtrasOpciones.views import *
 
 from colegio.Apps.Matricula.forms import MatriculaForm
 from colegio.Apps.Notas.forms import NotasForm
@@ -161,6 +162,12 @@ def ImprimirLibretasxAlumno(request):
         SitFinalnotas4 = dictfetchall(cursor)
         #######end para situacion final
 
+        ########solo se usa para situacion final 2023 Modificado 19/dic/2023
+        SitFinalbim4_2023="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia<>%s"
+        cursor.execute(SitFinalbim4_2023,[ano,gradonivel,seccion,nivelcorto,'CALIFICATIVO DE ÁREA'])
+        SitFinalnotas4_2023 = dictfetchall(cursor)
+        #######end para situacion final
+
         if gradonivel=='5SEC' and paca==5:
             prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
             notas=prom_quinto
@@ -176,6 +183,7 @@ def ImprimirLibretasxAlumno(request):
                 SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,notas,gradonivel)
             else:
                 SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel)
+                
 
         contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta
         if nivelcorto=='SEC':
@@ -345,10 +353,11 @@ def ImprimirNotasPrimaria(request):
 
 
         ########solo se usa para la situación final
-        SitFinalbim4="select n4.matricula,n4.nombrecurso,n4.nota from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia=%s"
+        SitFinalbim4="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia<>%s"
         cursor.execute(SitFinalbim4,[ano,gradonivel,seccion,'PRIM','CALIFICATIVO DE ÁREA'])
-        SitFinalnotas4 = dictfetchall(cursor)
-        #######end para situacion final
+        SitFinalnotas4_2023 = dictfetchall(cursor)
+        #######end para situacion final    
+        
 
        #recorre cada vista consultada en cada bimestre y coloca en el objectlist la nota que le corresponde
         if paca==2:
@@ -381,7 +390,9 @@ def ImprimirNotasPrimaria(request):
                     if n['competencia']==n4['competencia'] and  n['curso']==n4['curso'] and n['matricula']==n4['matricula']:
                         n['nota4']=n4['nota']
 
-        SitFinal=SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4)
+        #SitFinal=SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4)
+        SitFinal=SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
+        
         contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta de avance
         return render(request,'libretas/LibretaPrimaria.html',contexto2)
     else:
@@ -465,28 +476,36 @@ def ImprimirNotasSecundaria(request):
                         n['nota4']=n4['nota']
         
         ########solo se usa para la situación final
-        SitFinalbim4="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia=%s"
-        cursor.execute(SitFinalbim4,[ano,gradonivel,seccion,nivelcorto,'CALIFICATIVO DE ÁREA'])
-        SitFinalnotas4 = dictfetchall(cursor)
+        # SitFinalbim4="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia=%s"
+        # cursor.execute(SitFinalbim4,[ano,gradonivel,seccion,nivelcorto,'CALIFICATIVO DE ÁREA'])
+        # SitFinalnotas4 = dictfetchall(cursor)
         #######end para situacion final
         
+        ########solo se usa para situacion final 2023 Modificado 19/dic/2023
+        SitFinalbim4_2023="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso,n4.nombrecompetencia from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.tipocurso=%s and n4.nombrecompetencia<>%s"
+        cursor.execute(SitFinalbim4_2023,[ano,gradonivel,seccion,nivelcorto,'CURSO','CALIFICATIVO DE ÁREA'])
+        SitFinalnotas4_2023 = dictfetchall(cursor)
+        #######end para situacion final
         
         ##Para promedio Final de 5Sec
-        if gradonivel=='5SEC' and paca==5:
-            prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
-            notas=prom_quinto
-            SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,notas,gradonivel)
-        else:
-            SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel)
+        if gradonivel=='1SEC' or gradonivel=='2SEC' or gradonivel=='3SEC' or gradonivel=='4SEC' or gradonivel=='5SEC' and paca==5:
+        #     prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
+        #     notas=prom_quinto
+        #     SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,notas,gradonivel)
+        #     SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
+        # else:
+            # SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel)
+            SitFinal=SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
 
         contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta de avance
         return render(request,'libretas/LibretaSecundaria.html',contexto2)
     else:
         return render(request,'otras_opciones/imprimir_libreta_secundaria.html',contexto)
 
-def SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4):
     if paca==5: #el 5 es el id del bimestre
         alumnos=[]
+
+def SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4):
         notamat=''
         notacom=''
         notaper=''
@@ -511,23 +530,6 @@ def SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4):
             alumnos.append({"idMat":mat['id'],"sitfinal":SituacionFinal})#almacenando los datos de situacion final
 
         return alumnos
-
-
-def CaliFinalSec(paca,notas):
-    if paca==5:
-        for n in list(notas):
-        
-            nota1=n['nota']
-            nota2=n['nota2']
-            nota3=n['nota3']
-            nota4=n['nota4']
-            # print(calculo_promedio(nota1,nota2,nota3,nota4))
-            if nota1 != '' and nota2 != '' and nota3 != '' and nota4 != '':
-                n['promedio']=calculo_promedio(nota1,nota2,nota3,nota4)            
-            else:
-                n['promedio']=''
-            # lista_promedios.append({'promedio':prom})
-        return notas
 
 def SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
     if paca==5: #el 5 es el id del bimestre
@@ -606,3 +608,229 @@ def SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
 
                 alumnos.append({"idMat":mat['id'],"sitfinal":SituacionFinal})#almacenando los datos de situacion final
         return alumnos
+
+###solicitud de nuevo calculo de situación final###
+def SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
+     if paca==5: #el 5 es el id del bimestre IV
+        alumnos=[]
+        
+        cursos=Curso.objects.filter(Tipo='CURSO', Nivel='SEC')
+        
+        ####--------ENCUENTRA LA SITUACIÓN FINAL--------------####
+        if gradonivel=='1SEC' or gradonivel=='3SEC' or gradonivel=='4SEC': 
+            for mat in alumnos_idmat:
+                areas_aprobadas=0
+                areas_desaprobadas=0
+
+                for curso in cursos:
+                    puntos=0  #LAS A, AD, Y B
+                    restos=0  #LAS C
+                    recuperacion=0
+                    
+                    for notas in list(SitFinalnotas4):
+                        if mat['id']==notas['matricula'] and notas['nombrecurso']==curso.Nombre:
+                            
+                            letra=numeros_a_letras(notas['nota'])
+                            ##obtiene las cantidades de compe aprobadas y desaprobadas        
+                            if (letra=='A' or letra=='AD' or letra=='B'):
+                                puntos+=1
+                            elif letra=='C': #SE ASUME  QUE ES "C"
+                                restos+=1
+                                recuperacion+=1
+                    
+                    
+                    ##evalua si el area es aprobada o desaprobada
+                    if puntos > restos:
+                        areas_aprobadas+=1
+                    else:
+                        areas_desaprobadas+=1
+
+                
+                ##evalua la situacion final de cada alumno
+                if areas_aprobadas==11:##A todas las áreas asociadas
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})#almacenando los datos de situacion final
+                elif areas_desaprobadas>=4:
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                else:
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+
+        elif gradonivel=='2SEC' or gradonivel=='5SEC':
+            for mat in alumnos_idmat:
+                areas_aprobadas=0
+                areas_desaprobadas=0
+                areas_recuperacion=0
+                
+                for curso in cursos:
+                    A=0  #LAS A y AD
+                    C=0  #LAS C
+                    B=0
+                    competencias=0
+                    for notas in list(SitFinalnotas4):
+                        if mat['id']==notas['matricula'] and notas['nombrecurso']==curso.Nombre:
+                            competencias+=1
+                            letra=numeros_a_letras(notas['nota'])
+                            ##obtiene las cantidades de compe aprobadas y desaprobadas        
+                            if (letra=='A' or letra=='AD'):
+                                A+=1
+                            if letra=='B':
+                                B+=1
+                            if letra=='C': #SE ASUME  QUE ES "C"
+                                C+=1
+                            # elif letra=='B':
+                            #     recuperacion+=1
+                                
+                    
+                    # competencias=round(competencias//2)
+                    if A > C and A > B: #esta bien para calcular el promovido
+                        areas_aprobadas+=1
+                        
+                    if C > B and C > A: #esta bien para calcular la repitencia
+                        areas_desaprobadas+=1
+
+                    if C>0:
+                        areas_recuperacion+=1
+                    
+                    
+                ##evalua la situacion final de cada alumno
+                #print("alumno "+ str(mat['id'])+ ", aa="+str(areas_aprobadas)+", ad="+str(areas_desaprobadas)+", ar="+str(areas_recuperacion))
+                if areas_desaprobadas >= 4:
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                else:
+                    if areas_recuperacion>0:    
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+                    else:
+                        if areas_aprobadas>3 :#and areas_desaprobadas==0
+                            alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})#almacenando los datos de situacion final
+                # elif areas_desaprobadas>=4:
+                #     alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+
+
+        return alumnos
+            
+def SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
+    if paca==5: #el 5 es el id del bimestre
+        alumnos=[]
+        cursos=Curso.objects.filter(Tipo='CURSO',Nivel='PRIM')
+
+        if gradonivel=='1PRIM':
+            for mat in alumnos_idmat:
+                alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})
+            
+        elif gradonivel=='2PRIM' or gradonivel=='4PRIM' or gradonivel=='6PRIM':
+            cant_cursos=0
+            
+            if gradonivel=='2PRIM':
+                cant_cursos=cursos.count()-1
+            else:
+                cant_cursos=cursos.count()
+                
+            for mat in alumnos_idmat:
+                areas_aprobadas=0
+                areas_desaprobadas=0
+                areas_recuperacion=0
+                
+                for curso in cursos:
+                    A=0  #LAS A y AD
+                    C=0  #LAS C
+                    B=0
+                    #competencias=0
+                    for notas in list(SitFinalnotas4):
+                        if mat['id']==notas['matricula'] and notas['nombrecurso']==curso.Nombre:
+                            #competencias+=1
+                            letra=notas['nota']
+                            ##obtiene las cantidades de compe aprobadas y desaprobadas        
+                            if (letra=='A' or letra=='AD'):
+                                A+=1
+                            if letra=='B':
+                                B+=1
+                            if letra=='C': #SE ASUME  QUE ES "C"
+                                C+=1
+                    
+
+                    if A > C and A > B: #esta bien para calcular el promovido
+                        areas_aprobadas+=1
+                        
+                    if C > B and C > A: #esta bien para calcular la repitencia
+                        areas_desaprobadas+=1
+
+                    if C>0:
+                        areas_recuperacion+=1
+                        
+                if areas_desaprobadas >= 4:
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                else:
+                    if areas_recuperacion>0:    
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+                    else:
+                        if areas_aprobadas>4 :#and areas_desaprobadas==0
+                            alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})#almacenando los datos de situacion final
+        
+        elif gradonivel=='3PRIM' or gradonivel=='5PRIM':
+            cant_cursos=0
+            if gradonivel=='3PRIM':
+                cant_cursos=cursos.count() -1 #menos 1 el curso de chino desde 4 a 6
+            else:
+                cant_cursos=cursos.count()
+                
+            for mat in alumnos_idmat:
+                areas_aprobadas=0
+                areas_desaprobadas=0
+                areas_recuperacion=0
+                
+                for curso in cursos:
+                    A=0  #LAS A y AD
+                    C=0  #LAS C
+                    B=0
+                    competencias=0
+                    for notas in list(SitFinalnotas4):
+                        if mat['id']==notas['matricula']:
+                            if notas['nombrecurso']==curso.Nombre:
+                                competencias+=1
+                                letra=notas['nota']
+                                ##obtiene las cantidades de compe aprobadas y desaprobadas        
+                                if (letra=='A' or letra=='AD'):
+                                    A+=1
+                                if letra=='B':
+                                    B+=1
+                                if letra=='C': #SE ASUME  QUE ES "C"
+                                    C+=1
+                    
+                    competencias=round(competencias/2)
+                    
+                    if B >= competencias or A >= competencias: #para Promovido
+                        areas_aprobadas+=1
+                    if C >= competencias: #para Repitencia
+                        areas_desaprobadas+=1
+                    if C > B and C > A:
+                        areas_recuperacion+=1
+                      
+                        
+                print("alumno: "+str(mat['id']) + "cant. areas apro.: "+str(areas_desaprobadas))
+                print(cant_cursos)
+                if areas_desaprobadas >=4:
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                else:
+                    if areas_aprobadas>=cant_cursos :#and areas_desaprobadas==0
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})
+                    else:
+                        # if areas_recuperacion>0:    
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+
+        
+        return alumnos
+
+def CaliFinalSec(paca,notas):
+    if paca==5:
+        for n in list(notas):
+        
+            nota1=n['nota']
+            nota2=n['nota2']
+            nota3=n['nota3']
+            nota4=n['nota4']
+            # print(calculo_promedio(nota1,nota2,nota3,nota4))
+            if nota1 != '' and nota2 != '' and nota3 != '' and nota4 != '':
+                n['promedio']=calculo_promedio(nota1,nota2,nota3,nota4)            
+            else:
+                n['promedio']=''
+            # lista_promedios.append({'promedio':prom})
+        return notas

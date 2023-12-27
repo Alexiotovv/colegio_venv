@@ -3557,7 +3557,7 @@ def numeros_a_letras(valor):
 				if int(valor)<=13:
 					devuelveLetra='B'
 				else:
-					if int(valor)<=16:
+					if int(valor)<=17:
 						devuelveLetra='A'
 					else:
 						if int(valor)<=20:

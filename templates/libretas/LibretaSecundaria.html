@@ -325,7 +325,7 @@
 
                                                 <!--AQUI CALIFICATIVO FINAL -->
                                                 
-                                                {% if gradonivel == '5SEC' %}
+                                                {% comment %} {% if gradonivel == '5SEC' %}
                                                     <td style="padding-bottom: 0px;
                                                     -webkit-print-color-adjust: exact;
                                                     padding-top: 0px;
@@ -341,7 +341,7 @@
                                                     {% else %}
                                                         {{ no.promedio }}
                                                     {% endif %}
-                                                {% else %}
+                                                {% else %} {% endcomment %}
                                                     <td style="padding-bottom: 0px;
                                                     -webkit-print-color-adjust: exact;
                                                     padding-top: 0px;
@@ -371,7 +371,7 @@
                                                         {% endif %}
                                                     {% endif %}
                                                 {% endif %}
-                                            {% endif %}
+                                            {% comment %} {% endif %} {% endcomment %}
                                             </td>
                                         <!-- END CALIFICATIVO FINAL -->
 
