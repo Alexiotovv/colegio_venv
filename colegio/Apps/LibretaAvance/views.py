@@ -168,21 +168,15 @@ def ImprimirLibretasxAlumno(request):
         SitFinalnotas4_2023 = dictfetchall(cursor)
         #######end para situacion final
 
-        if gradonivel=='5SEC' and paca==5:
-            prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
-            notas=prom_quinto
+        # if gradonivel=='5SEC' and paca==5:
+        #     prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
+        #     notas=prom_quinto
 
 
         if nivelcorto=='PRIM':
-            SitFinal=SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4)
+            SitFinal=SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
         else:
-            ##Para promedio Final de 5Sec
-            if gradonivel=='5SEC' and paca==5:
-                prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
-                notas=prom_quinto
-                SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,notas,gradonivel)
-            else:
-                SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel)
+            SitFinal=SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
                 
 
         contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta
@@ -219,7 +213,6 @@ def dictfetchall(cursor):
 
 def OpcionImprimir(request):
 	return render(request,'libretas/opcion_imprimir.html')
-
 
 
 def ImprimirAvanceNotasPrimaria(request):
@@ -609,6 +602,7 @@ def SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
                 alumnos.append({"idMat":mat['id'],"sitfinal":SituacionFinal})#almacenando los datos de situacion final
         return alumnos
 
+
 ###solicitud de nuevo calculo de situación final###
 def SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
      if paca==5: #el 5 es el id del bimestre IV
@@ -621,44 +615,60 @@ def SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
             for mat in alumnos_idmat:
                 areas_aprobadas=0
                 areas_desaprobadas=0
-
+                areas_recuperacion=0
+                
+                cursos_recuperacion=[]
+                
                 for curso in cursos:
-                    puntos=0  #LAS A, AD, Y B
-                    restos=0  #LAS C
-                    recuperacion=0
-                    
+                    A=0  #LAS A y AD
+                    C=0  #LAS C
+                    B=0
+                    competencias=0
                     for notas in list(SitFinalnotas4):
                         if mat['id']==notas['matricula'] and notas['nombrecurso']==curso.Nombre:
                             
+                            competencias+=1
                             letra=numeros_a_letras(notas['nota'])
                             ##obtiene las cantidades de compe aprobadas y desaprobadas        
-                            if (letra=='A' or letra=='AD' or letra=='B'):
-                                puntos+=1
-                            elif letra=='C': #SE ASUME  QUE ES "C"
-                                restos+=1
-                                recuperacion+=1
+                            if (letra=='A' or letra=='AD'):
+                                A+=1
+                            if letra=='B':
+                                B+=1
+                            if letra=='C': #SE ASUME  QUE ES "C"
+                                C+=1
+                                
                     
+                    competencias=round(competencias/2)
                     
-                    ##evalua si el area es aprobada o desaprobada
-                    if puntos > restos:
+                    if A >= competencias or B >= competencias or A>=C or B>=C:
                         areas_aprobadas+=1
-                    else:
+                        
+                    if C >= competencias: 
                         areas_desaprobadas+=1
 
-                
+                    if C>=competencias and B<C:
+                        areas_recuperacion+=1
+                        cursos_recuperacion.append(curso.Nombre)
+                        
                 ##evalua la situacion final de cada alumno
-                if areas_aprobadas==11:##A todas las áreas asociadas
-                    alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})#almacenando los datos de situacion final
-                elif areas_desaprobadas>=4:
-                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
-                else:
-                    alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+                if areas_desaprobadas>=4:
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE',"cursos_recuperacion":cursos_recuperacion})
+                    
+                elif areas_aprobadas==11:##A todas las áreas asociadas
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO',"cursos_recuperacion":cursos_recuperacion})
+                    
+                elif areas_recuperacion>0:
+                    print("hay una recpueracion")
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN',"cursos_recuperacion":cursos_recuperacion})
+                
 
         elif gradonivel=='2SEC' or gradonivel=='5SEC':
             for mat in alumnos_idmat:
                 areas_aprobadas=0
                 areas_desaprobadas=0
                 areas_recuperacion=0
+                
+                cursos_recuperacion=[]
                 
                 for curso in cursos:
                     A=0  #LAS A y AD
@@ -676,33 +686,30 @@ def SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
                                 B+=1
                             if letra=='C': #SE ASUME  QUE ES "C"
                                 C+=1
-                            # elif letra=='B':
-                            #     recuperacion+=1
-                                
                     
-                    # competencias=round(competencias//2)
-                    if A > C and A > B: #esta bien para calcular el promovido
+                    competencias=round(competencias/2)
+                    
+                    if A >= B and C==0 and B<competencias: #esta bien para calcular el promovido
                         areas_aprobadas+=1
                         
-                    if C > B and C > A: #esta bien para calcular la repitencia
+                    if C >= B and C >= A: #esta bien para calcular la repitencia
                         areas_desaprobadas+=1
-
-                    if C>0:
+                        
+                    if C>0 or B>competencias:
                         areas_recuperacion+=1
+                        cursos_recuperacion.append(curso.Nombre)
                     
                     
                 ##evalua la situacion final de cada alumno
                 #print("alumno "+ str(mat['id'])+ ", aa="+str(areas_aprobadas)+", ad="+str(areas_desaprobadas)+", ar="+str(areas_recuperacion))
-                if areas_desaprobadas >= 4:
-                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
-                else:
-                    if areas_recuperacion>0:    
-                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
-                    else:
-                        if areas_aprobadas>3 :#and areas_desaprobadas==0
-                            alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})#almacenando los datos de situacion final
-                # elif areas_desaprobadas>=4:
+                # if areas_desaprobadas >= 4:
                 #     alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                if areas_desaprobadas>=4:
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE',"cursos_recuperacion":cursos_recuperacion})
+                elif areas_recuperacion>0:    
+                     alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN',"cursos_recuperacion":cursos_recuperacion})
+                elif areas_aprobadas>=3 :#and areas_desaprobadas==0
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO',"cursos_recuperacion":cursos_recuperacion})
 
 
         return alumnos
@@ -713,10 +720,15 @@ def SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
         cursos=Curso.objects.filter(Tipo='CURSO',Nivel='PRIM')
 
         if gradonivel=='1PRIM':
+            
+            cursos_recuperacion=[]
+            
             for mat in alumnos_idmat:
-                alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})
+                alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO',"cursos_recuperacion":cursos_recuperacion})
             
         elif gradonivel=='2PRIM' or gradonivel=='4PRIM' or gradonivel=='6PRIM':
+            
+
             cant_cursos=0
             
             if gradonivel=='2PRIM':
@@ -728,7 +740,7 @@ def SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
                 areas_aprobadas=0
                 areas_desaprobadas=0
                 areas_recuperacion=0
-                
+                cursos_recuperacion=[]    
                 for curso in cursos:
                     A=0  #LAS A y AD
                     C=0  #LAS C
@@ -755,17 +767,21 @@ def SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
 
                     if C>0:
                         areas_recuperacion+=1
+                        cursos_recuperacion.append(curso.Nombre)
                         
                 if areas_desaprobadas >= 4:
-                        alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE',"cursos_recuperacion":cursos_recuperacion})
                 else:
                     if areas_recuperacion>0:    
-                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN',"cursos_recuperacion":cursos_recuperacion})
                     else:
                         if areas_aprobadas>4 :#and areas_desaprobadas==0
-                            alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})#almacenando los datos de situacion final
+                            alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO',"cursos_recuperacion":cursos_recuperacion})
         
         elif gradonivel=='3PRIM' or gradonivel=='5PRIM':
+            
+            
+            
             cant_cursos=0
             if gradonivel=='3PRIM':
                 cant_cursos=cursos.count() -1 #menos 1 el curso de chino desde 4 a 6
@@ -776,7 +792,8 @@ def SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
                 areas_aprobadas=0
                 areas_desaprobadas=0
                 areas_recuperacion=0
-                
+                cursos_recuperacion=[]
+                    
                 for curso in cursos:
                     A=0  #LAS A y AD
                     C=0  #LAS C
@@ -803,18 +820,19 @@ def SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4,gradonivel):
                         areas_desaprobadas+=1
                     if C > B and C > A:
                         areas_recuperacion+=1
+                        cursos_recuperacion.append(curso.Nombre)
                       
                         
                 print("alumno: "+str(mat['id']) + "cant. areas apro.: "+str(areas_desaprobadas))
                 print(cant_cursos)
                 if areas_desaprobadas >=4:
-                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE'})#almacenando los datos de situacion final
+                    alumnos.append({"idMat":mat['id'],"sitfinal":'REPITE',"cursos_recuperacion":cursos_recuperacion})
                 else:
                     if areas_aprobadas>=cant_cursos :#and areas_desaprobadas==0
-                        alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO'})
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'PROMOVIDO',"cursos_recuperacion":cursos_recuperacion})
                     else:
                         # if areas_recuperacion>0:    
-                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN'})#almacenando los datos de situacion final
+                        alumnos.append({"idMat":mat['id'],"sitfinal":'RECUPERACIÓN',"cursos_recuperacion":cursos_recuperacion})
 
         
         return alumnos

@@ -803,6 +803,8 @@
                                 </table>
                             </div><!-- CIERRA CLAVE DE EVALUACIÓN-->
                         {% endifnotequal %}
+
+
                         <div class="col-6">
                             <table class="" border>
                                 <thead><tr><th colspan="2" style="background-color: rgb(226, 225, 225);
@@ -871,6 +873,36 @@
                                 </tbody>
                             </table>
                         </div>
+
+
+                        <div class="col-6">
+                            <br>
+                            <table class="" border>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;width: 250px;color: black;">
+                                            CURSOS RECUPERACIÓN
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding-bottom: 0px; padding-top: 0px; text-align: center; -webkit-print-color-adjust: exact;font-size: 8px;color: black;width: 50px;">
+                                        {% for sf in SitFinal %}
+                                            {% if sf.idMat == mat.id %}
+                                                <p>{{sf.cursos_recuperacion}}</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </td>
+                                    </tr>    
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div><!-- CLAVE DE EVALUACIÓN -->
                 
                 <div class="row" style="margin-top: 20px;"><!-- ROW DE LAS FIRMAS -->
