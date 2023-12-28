@@ -252,13 +252,6 @@
                                                         color: rgb(214, 28, 28);
                                                     {% endif %}
                                                     {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
-                                                        {% comment %} {% if gradonivel == '5SEC' %}
-                                                            {% if no.nota3 == '1' or no.nota3 == '2' or no.nota3 == '3' or no.nota3 == '4' or no.nota3 == '5' or  no.nota3 == '6' or no.nota3 == '7' or no.nota3 == '8' or no.nota3 == '9' %}
-                                                                0{{ no.nota3 }}
-                                                            {% else %}
-                                                                {{ no.nota3 }}
-                                                            {% endif %}
-                                                        {% else %} {% endcomment %}
                                                             {% if no.nota3 >= '0' %}
                                                                 {% if  no.nota3 == '1' or no.nota3 == '2' or no.nota3 == '3' or no.nota3 == '4' or no.nota3 == '5' or  no.nota3 == '6' or no.nota3 == '7' or no.nota3 == '8' or no.nota3 == '9' or no.nota3 == '10' or no.nota3 == '01' or no.nota3 == '02' or no.nota3 == '03' or no.nota3 == '04' or no.nota3 == '05' or  no.nota3 == '06' or no.nota3 == '07' or no.nota3 == '08' or no.nota3 == '09' or no.nota3 == '10'%}
                                                                 C
