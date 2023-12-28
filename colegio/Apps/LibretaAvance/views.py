@@ -414,27 +414,28 @@ def ImprimirNotasSecundaria(request):
             nivel='PRIMARIO'
             nivelcorto='PRIM'
 
-        result = Curso.objects.raw('SELECT 1 as id,ccur."Curso_id" as IDCURSO,Count(*) as NUM_COMPE FROM "Competencias_competenciacurso" as ccur GROUP BY ccur."Curso_id" ORDER BY ccur."Curso_id"')
+        result = Curso.objects.raw('SELECT 1 as id,ccur."Curso_id" as IDCURSO,Count(*)-1 as NUM_COMPE FROM "Competencias_competenciacurso" as ccur GROUP BY ccur."Curso_id" ORDER BY ccur."Curso_id"')
+        
         tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
         matricula = Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano,Alumno__Estado='A').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         alumnos_idmat= Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano).values('id','Grado').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         #Envia solamente para la apreciación del tutor
         apreciaciones=NotasComp.objects.filter(Matricula__AnoAcademico__Ano=ano,Matricula__Grado=gradonivel,Matricula__Seccion=seccion).order_by('PAcademico__id')
 
-        bim1="select n1.* from notas_primaria_ibimestre n1 WHERE n1.Ano=%s and n1.grado=%s and n1.seccion=%s and n1.nivelcurso=%s"
-        cursor.execute(bim1,[ano,gradonivel,seccion,'SEC'])
+        bim1="select n1.* from notas_primaria_ibimestre n1 WHERE n1.Ano=%s and n1.grado=%s and n1.seccion=%s and n1.nivelcurso=%s and n1.nombrecompetencia<>%s"
+        cursor.execute(bim1,[ano,gradonivel,seccion,'SEC','CALIFICATIVO DE ÁREA'])
         notas = dictfetchall(cursor)
 
-        bim2="select n2.* from notas_primaria_iibimestre n2 WHERE n2.Ano=%s and n2.grado=%s and n2.seccion=%s and n2.nivelcurso=%s"
-        cursor.execute(bim2,[ano,gradonivel,seccion,'SEC'])
+        bim2="select n2.* from notas_primaria_iibimestre n2 WHERE n2.Ano=%s and n2.grado=%s and n2.seccion=%s and n2.nivelcurso=%s and n2.nombrecompetencia<>%s"
+        cursor.execute(bim2,[ano,gradonivel,seccion,'SEC','CALIFICATIVO DE ÁREA'])
         notas2 = dictfetchall(cursor)
 
-        bim3="select n3.* from notas_primaria_iiibimestre n3 WHERE n3.Ano=%s and n3.grado=%s and n3.seccion=%s and n3.nivelcurso=%s"
-        cursor.execute(bim3,[ano,gradonivel,seccion,'SEC'])
+        bim3="select n3.* from notas_primaria_iiibimestre n3 WHERE n3.Ano=%s and n3.grado=%s and n3.seccion=%s and n3.nivelcurso=%s and n3.nombrecompetencia<>%s"
+        cursor.execute(bim3,[ano,gradonivel,seccion,'SEC','CALIFICATIVO DE ÁREA'])
         notas3 = dictfetchall(cursor)
 
-        bim4="select n4.* from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s"
-        cursor.execute(bim4,[ano,gradonivel,seccion,'SEC'])
+        bim4="select n4.* from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia<>%s"
+        cursor.execute(bim4,[ano,gradonivel,seccion,'SEC','CALIFICATIVO DE ÁREA'])
         notas4 = dictfetchall(cursor)
 
         if paca==2:
@@ -495,10 +496,10 @@ def ImprimirNotasSecundaria(request):
     else:
         return render(request,'otras_opciones/imprimir_libreta_secundaria.html',contexto)
 
-    if paca==5: #el 5 es el id del bimestre
-        alumnos=[]
 
 def SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4):
+    if paca==5: #el 5 es el id del bimestre
+        alumnos=[]
         notamat=''
         notacom=''
         notaper=''
