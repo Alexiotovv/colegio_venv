@@ -88,7 +88,7 @@ def GuardarNotaEditada(request,id):
 		nota=request.POST.get(id)
 		# primero guarda la nota editada
 		obj=NotasComp.objects.get(id=id)
-		obj.Nota=nota
+		obj.Nota=str(nota).upper()
 		obj.save()
 		data={'ok':'ok'}
 		return JsonResponse(data)
@@ -98,7 +98,7 @@ def GuardarPromedioEditado(request,id):
 		nota=request.POST.get(id)
 		# primero guarda la nota editada
 		obj=NotasComp.objects.get(id=id)
-		obj.Nota=nota
+		obj.Nota=str(nota).upper()
 		obj.save()
 		data={'ok':'ok'}
 		return JsonResponse(data)
@@ -157,7 +157,7 @@ def ActualizarAvanceNotasPorAlumno(request):
 		data=NotasComp.objects.filter(Matricula_id=matricula,PAcademico_id=periodo,Curso_id=curso)
 		for dd in data:
 			obj = NotasComp.objects.get(id=request.POST.get(str(dd.id)))
-			obj.Nota = request.POST.get("nota"+str(dd.id))
+			obj.Nota = str(request.POST.get("nota"+str(dd.id))).upper()
 			obj.save()
 
 		data={'ok':'ok'}
@@ -191,7 +191,7 @@ def GuardaAvanceNotasPorAlumno(request):
 			obj.Docente_id=idDocente.id
 			obj.Matricula_id=idMatricula
 			obj.PAcademico_id=idPacademico
-			obj.Nota=request.POST.get(str(cc.id))
+			obj.Nota=str(request.POST.get(str(cc.id))).upper()
 			obj.save()
 		data={'ok':'ok'}
 		return JsonResponse(data)
@@ -586,7 +586,7 @@ def NotasNuevoSaveUno(request):
 		mat.id = request.POST.get("Alumno")
 		notas.Matricula = mat
 
-		notas.Nota = request.POST.get("Nota")
+		notas.Nota = str(request.POST.get("Nota")).upper()
 		notas.save()
 		return redirect('app_listar_notas')
 	else:
