@@ -119,8 +119,10 @@ def ImportarArchivo(request):
 		if file.is_valid():
 			nombre_archivo=str(request.FILES['file'])
 			if nombre_archivo=="Formato_Importacion_Matricula.xlsx":
-				handle_uploaded_file(request.FILES['file'])
 				Ruta = "/var/www/vhosts/colegio_venv/colegio/static/upload/Formato_Importacion_Matricula.xlsx"
+				# Ruta = "static/upload/Formato_Importacion_Matricula.xlsx"
+				handle_uploaded_file(request.FILES['file'],Ruta)
+				
 				Libro = load_workbook(Ruta)
 				Hoja1 = Libro.active
 				
