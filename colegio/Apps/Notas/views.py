@@ -335,7 +335,7 @@ def NotasNuevoSaveComp(request):
 	Matricula__AnoAcademico=ano.id, PAcademico__id=paca.id)
 	#notas = AvanceNotas.objects.filter(Curso__id=td.idCurso, Matricula__Seccion=td.seccion, Matricula__Grado=td.grado, Matricula__AnoAcademico=ano.id, PAcademico__id=paca.id)
 	#Encontrando las competencias del Curso
-	lista_compe=CompetenciaCurso.objects.filter(Curso__id=curso.id).order_by('Competencias__Orden')
+	lista_compe=CompetenciaCurso.objects.filter(Curso__id=curso.id,Competencias__status=True).order_by('Competencias__Orden')
 	######################################################################
 	nivel=str(grado)[1:len(grado)]
 	num_compe=0

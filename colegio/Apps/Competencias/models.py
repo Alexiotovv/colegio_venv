@@ -7,6 +7,8 @@ class Competencias(models.Model):
     nivel=models.CharField(max_length=10,choices=NIVEL,default='PRIM')
     nombre_competencia=models.CharField(max_length=250,default='')
     Orden=models.IntegerField(default=1)
+    STATUS=((True,'HABILITADO'),(False,'INHABILITADO'))
+    status=models.BooleanField(choices=STATUS,default=True)
 
     def Competencias(self):
         cadena = "{0}-{1}"

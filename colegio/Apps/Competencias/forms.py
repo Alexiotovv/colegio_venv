@@ -7,12 +7,14 @@ class CompetenciasForm(forms.ModelForm):
 		fields = [
 		'nivel',
 		'nombre_competencia',
-		'Orden'
+		'Orden',
+		'status'
 		]
 		widgets = {
 		'nivel':forms.Select(attrs = {'class':'single-select'}),
 		'nombre_competencia':forms.TextInput(attrs = {'class':'form-control'}),
 		'Orden':forms.NumberInput(attrs = {'class':'form-control'}),
+  		'status':forms.Select(attrs = {'class':'form-select'}),
 		}
 
 # class CompetenciaCursoForm(forms.ModelForm):

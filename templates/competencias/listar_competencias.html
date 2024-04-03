@@ -16,6 +16,7 @@
 		      <th scope="col">Id</th>
 			  <th scope="col">Nivel</th>
 		      <th scope="col">Nombre de Competencia</th>
+			  <th scope="col">Estado</th>
 		      <th scope="col">Acciones</th>
 		    </tr>
 		  </thead>
@@ -25,6 +26,13 @@
 			      	<td>{{ lc.id }}</td>
 					<td>{{ lc.nivel }}</td>
 			      	<td>{{ lc.nombre_competencia }}</td>
+					<td>
+						{% if lc.status %}
+							HABILITADO
+						{% else %}
+							INHABILITADO
+						{% endif %} 
+					</td>
 			      	<td>
 						{% for group in user.groups.all %}
 							{% if group.name == 'Docentes' %}

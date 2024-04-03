@@ -119,11 +119,11 @@ def ImportarArchivo(request):
 		if file.is_valid():
 			nombre_archivo=str(request.FILES['file'])
 			if nombre_archivo=="Formato_Importacion_Matricula.xlsx":
-				Ruta = "/var/www/vhosts/colegio_venv/colegio/static/upload/Formato_Importacion_Matricula.xlsx"
-				# Ruta = "static/upload/Formato_Importacion_Matricula.xlsx"
-				handle_uploaded_file(request.FILES['file'],Ruta)
+				ruta = "/var/www/vhosts/colegio_venv/colegio/static/upload/Formato_Importacion_Matricula.xlsx"
+				# ruta = "static/upload/Formato_Importacion_Matricula.xlsx"
+				handle_uploaded_file(request.FILES['file'],ruta)
 				
-				Libro = load_workbook(Ruta)
+				Libro = load_workbook(ruta)
 				Hoja1 = Libro.active
 				
 				C1=Hoja1["A1"].value
@@ -215,7 +215,7 @@ def ImportarArchivo(request):
 							mat.save()
 
 					resultado="Los regitros se importaron Correctamente. Alumnos no registrados: "+ str(no_registrados)+ " (alumnos ya existen.)"
-				Libro.save(Ruta)
+				Libro.save(ruta)
 			else:
 				resultado="Nombre de Archivo Incorrecto"
 			context={'resultado':resultado}

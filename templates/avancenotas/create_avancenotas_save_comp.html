@@ -46,12 +46,12 @@
                     {% else %}
                         <div class="alert alert-dismissible alert-danger">
                             <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            <strong>Los Sentimos!</strong> Ya Existen Notas Registradas para el Grado:<STRONG>{{ grado }}</STRONG>, Sección: <STRONG>"{{ seccion }}",</STRONG> Curso: <strong>{{ curso.Nombre }},</strong> de éste Año y Periodo Académico. Por favor, revise sus Notas en <a href="{% url 'app_buscar_avancenotas' %}">Búsqueda Avanzada</a> o intente Nuevamente en <a href="{% url 'app_avancenota_nuevo' %}">Ingresar Notas de Libreta x Grado</a>, Gracias..!!
-                    </div>
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
+                            <strong>Lo Sentimos!</strong> Ya Existen Notas Registradas para el Grado:<STRONG>{{ grado }}</STRONG>, Sección: <STRONG>"{{ seccion }}",</STRONG> Curso: <strong>{{ curso.Nombre }},</strong> de éste Año y Periodo Académico. Por favor, revise sus Notas en <a href="{% url 'app_buscar_avancenotas' %}">Búsqueda Avanzada</a> o intente Nuevamente en <a href="{% url 'app_avancenota_nuevo' %}">Ingresar Notas de Libreta x Grado</a>, Gracias..!!
+                        </div>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
     {% if alumnos %}
         <button type="button"
                 class="btn btn-primary"
