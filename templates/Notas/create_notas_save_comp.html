@@ -48,7 +48,7 @@
                                             name="{{ comp.Competencias.id }}"
                                             id="{{alu.id}}{{ comp.id }}f1"
                                             class="form-control"
-                                            placeholder="Ej. Secundaria: 09,15 ó Primaria: A,B etc"
+                                            placeholder="Ej. A,B,C etc"
                                             
                                             {% ifequal comp.Competencias.nombre_competencia 'ORDEN DE MÉRITO' %} 
                                                 onchange="valida_datos_sec('{{alu.id}}{{ comp.id }}f1','ORDEN DE MÉRITO');"
@@ -72,7 +72,7 @@
                                                 onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
                                             {%endifequal%}
                                             onkeyup="activarmodonext('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
-                                            placeholder="Ej. Secundaria: 09,15 ó Primaria: A,B etc">
+                                            placeholder="Ej. A,B,C, etc">
                                         {% endifequal %}        
 
                                     </td>
@@ -150,7 +150,7 @@
                                                                 id="{{alu.id}}{{comp.id}}"
                                                                 class="form-control"
                                                                 onblur="poner_readonly_nota('{{alu.id}}{{comp.id}}');"
-                                                                placeholder="Ej. Secundaria: 09,15 ó Primaria: A,B etc"
+                                                                placeholder="Ej. A,B,C, etc"
                                                                 readonly="readonly"></textarea>
                                                         <button type="button"
                                                                 class="btn btn-warning btn-sm"
@@ -187,7 +187,7 @@
 	{   
         var ok=true;
         var elements = document.getElementById("f1").elements;
-		var msg="Debe completar todas las casillas de Evaluación/Nota con 01..20,A,B,C,AD,EXO o TRAS, etc para poder Guardar";
+		var msg="Debe completar todas las casillas de Evaluación/Nota con A,B,C,AD,EXO o TRAS, etc para poder Guardar";
 		var num=0;
 		for (var i = 0, element; element = elements[i++];) {
             if (element.type === "text"){

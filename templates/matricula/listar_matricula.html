@@ -64,7 +64,7 @@
 	                	{% if group.name == 'Administrador' %}
 						<a href="{% url 'app_matricula_detalle' matriculas.id %}" target="_blank" class="btn btn-success"><span class="eye-solid icon"></span>__</a>
 						<a href="{% url 'app_matricula_editar' matriculas.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
-						<a href="{% url 'app_matricula_delete' matriculas.id %}" class="btn btn-danger"><span class="trash-solid icon"></span>__</a>
+						<a href="" class="btn btn-danger btnEliminarMatricula"><span class="trash-solid icon"></span>__</a>
 						{% endif %}
 					{% endfor %}
 			      	</td>
@@ -82,8 +82,73 @@
 		<a type="submit" class="btn btn-info" href="{% url 'app_pasar_todos_nuevo_ano' %}">Matricular</a>
 	{% endif %}
 </div>
+
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<!-- Modal Header -->
+			<div class="modal-header">
+				<h5 class="modal-title">ELIMINAR MATRÍCULA</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<!-- Modal body -->
+			<div class="modal-body">
+				<input type="text" id="idmatricula" hidden>
+				<label>Confirme por favor para poder eliminar la matrícula de:</label>
+				<h5 id="txtalumno"></h5>
+			</div>
+			<!-- Modal footer -->
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" id="modalbtnEliminarMatricula" data-bs-dismiss="modal">Eliminar</button>
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
 </form>
 
+{% endblock %}
+
+{% block js1 %}
+	<script>
+
+		$(document).on('click','.btnEliminarMatricula', function(e) {
+			e.preventDefault();
+			fila = $(this).closest("tr");
+			id = (fila).find('td:eq(0)').text();
+			alumno=(fila).find('td:eq(2)').text();
+			$("#idmatricula").val(id);
+			$("#txtalumno").text(alumno);
+			$("#modalEliminar").modal('show');
+		});
+		$("#modalbtnEliminarMatricula").on("click",function(e){
+			e.preventDefault();
+			EliminarMatricula($("#idmatricula").val());
+		});
+
+		function EliminarMatricula(id){
+			$.ajax({
+				type: "GET",
+				url: "/matricula/eliminar/"+ id,
+				dataType: "json",
+				success: function (data) {
+					round_success_noti("Matrícula Eliminada, refresca la pagina para reflejar los cambios.")
+					
+				},
+				error: function (xhr, status, data) {
+					if(xhr.status == 500) {
+						// Manejo específico para error 500
+						round_error_noti("Error del servidor: " + data);
+					}
+				}
+
+			});
+		}
+	</script>
 {% endblock %}
 
 

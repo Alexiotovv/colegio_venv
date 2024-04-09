@@ -21,6 +21,8 @@ from colegio.Apps.Matricula.forms import ImportFile
 from colegio.Apps.Matricula.functions.functions import handle_uploaded_file
 
 from openpyxl import Workbook, load_workbook
+from django.shortcuts import get_object_or_404
+
 
 def MatriculaPrincipal(request):
 	return render(request,'matricula/matricula_principal.html')
@@ -330,10 +332,14 @@ def MatriculaList(request):
 		contexto={'ano_list':ano,'matriculados':matriculados,'mat_list':mat_list}
 		return render(request,'matricula/listar_matricula.html',contexto)
 
-class MatriculaDelete(DeleteView):
-	model = Matricula
-	template_name = 'matricula/delete_matricula.html'
-	success_url = '/matricula/listar/'
+def MatriculaDelete(request, id):
+    try:
+        Matricula.objects.filter(id=id).delete()
+        return JsonResponse({'data':'success','status':'200'})
+    except Exception as e:
+        return JsonResponse({"data":'ocurrió un error '+str(e),'status':500})
+
+	
 class MatriculaDetalle(DetailView):
 	model = Matricula
 	template_name = 'matricula/detalle_matricula.html'

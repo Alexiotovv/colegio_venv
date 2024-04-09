@@ -38,13 +38,16 @@ function error_noti() {
 	});
 }
 
-function success_noti() {
+function success_noti(msje) {
+	if (msje=='') {
+		msje='Guardado'
+	}
 	Lobibox.notify('success', {
 		pauseDelayOnHover: true,
 		continueDelayOnInactiveTab: false,
 		position: 'top right',
 		icon: 'bx bx-check-circle',
-		msg: 'Guardado.'
+		msg: msje
 	});
 }
 /* Rounded corners Notifications */
@@ -99,7 +102,10 @@ function round_error_noti() {
 	});
 }
 
-function round_success_noti() {
+function round_success_noti(msje) {
+	if (msje=='') {
+		msje='Guardado'
+	}
 	Lobibox.notify('success', {
 		pauseDelayOnHover: true,
 		size: 'mini',
@@ -108,7 +114,7 @@ function round_success_noti() {
 		delayIndicator: false,
 		continueDelayOnInactiveTab: false,
 		position: 'top right',
-		msg: 'Guardado.'
+		msg: msje
 	});
 }
 /* Notifications With Images*/
