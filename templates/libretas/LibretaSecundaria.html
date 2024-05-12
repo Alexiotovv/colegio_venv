@@ -172,14 +172,11 @@
                                                             {% if no.nota == '1' or no.nota == '2' or no.nota == '3' or no.nota == '4' or no.nota == '5' or  no.nota == '6' or no.nota == '7' or no.nota == '8' or no.nota == '9' or no.nota == '10' or no.nota == '01' or no.nota == '02' or no.nota == '03' or no.nota == '04' or no.nota == '05' or  no.nota == '06' or no.nota == '07' or no.nota == '08' or no.nota == '09' or no.nota == '10' %}
                                                                 color: rgb(214, 28, 28);
                                                             {% endif %}
-                                                            {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
-                                                        {% comment %} {% if gradonivel == '5SEC' %}
-                                                            {% if no.nota == '1' or no.nota == '2' or no.nota == '3' or no.nota == '4' or no.nota == '5' or  no.nota == '6' or no.nota == '7' or no.nota == '8' or no.nota == '9' %}
-                                                                0{{ no.nota }}
-                                                            {% else %}
-                                                                {{ no.nota }}
-                                                            {% endif %}
-                                                        {% else %} {% endcomment %}
+                                                            {% ifequal no.nota 'C' %} 
+                                                                color: black; font-weight: bold
+                                                            {% endifequal %}
+                                                            {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
+                                                            ">
                                                             {% if no.nota >= '0' %}
                                                                 {% if  no.nota == '1' or no.nota == '2' or no.nota == '3' or no.nota == '4' or no.nota == '5' or  no.nota == '6' or no.nota == '7' or no.nota == '8' or no.nota == '9' or no.nota == '10' or no.nota == '01' or no.nota == '02' or no.nota == '03' or no.nota == '04' or no.nota == '05' or  no.nota == '06' or no.nota == '07' or no.nota == '08' or no.nota == '09' or no.nota == '10'%}
                                                                     C
@@ -212,14 +209,9 @@
                                                         {% if no.nota2 == '1' or no.nota2 == '2' or no.nota2 == '3' or no.nota2 == '4' or no.nota2 == '5' or  no.nota2 == '6' or no.nota2 == '7' or no.nota2 == '8' or no.nota2 == '9' or no.nota2 == '10' or no.nota2 == '01' or no.nota2 == '02' or no.nota2 == '03' or no.nota2 == '04' or no.nota2 == '05' or  no.nota2 == '06' or no.nota2 == '07' or no.nota2 == '08' or no.nota2 == '09' or no.nota2 == '10' %}
                                                             color: rgb(214, 28, 28);
                                                         {% endif %}
-                                                        {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
-                                                        {% comment %} {% if gradonivel == '5SEC' %}
-                                                            {% if no.nota2 == '1' or no.nota2 == '2' or no.nota2 == '3' or no.nota2 == '4' or no.nota2 == '5' or  no.nota2 == '6' or no.nota2 == '7' or no.nota2 == '8' or no.nota2 == '9' %}
-                                                                0{{ no.nota2 }}
-                                                            {% else %}
-                                                                {{ no.nota2 }}
-                                                            {% endif %}
-                                                        {% else %} {% endcomment %}
+                                                        {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
+                                                        {% ifequal no.nota2 'C' %} color: black; font-weight: bold; {% endifequal %}">
+
                                                             {% if no.nota2 >= '0' %}
                                                                 {% if  no.nota2 == '1' or no.nota2 == '2' or no.nota2 == '3' or no.nota2 == '4' or no.nota2 == '5' or  no.nota2 == '6' or no.nota2 == '7' or no.nota2 == '8' or no.nota2 == '9' or no.nota2 == '10' or no.nota2 == '01' or no.nota2 == '02' or no.nota2 == '03' or no.nota2 == '04' or no.nota2 == '05' or  no.nota2 == '06' or no.nota2 == '07' or no.nota2 == '08' or no.nota2 == '09' or no.nota2 == '10'%}
                                                                 C
@@ -233,7 +225,7 @@
                                                                         {% if no.nota2 <= '20' %}
                                                                             AD
                                                                         {% else %}
-                                                                            {{no.nota2}}
+                                                                            {{no.Nota2}}
                                                                         {%endif%}
                                                                     {% endif %}
                                                                 {% endif %}
@@ -251,7 +243,8 @@
                                                     {% if no.nota3 == '1' or no.nota3 == '2' or no.nota3 == '3' or no.nota3 == '4' or no.nota3 == '5' or  no.nota3 == '6' or no.nota3 == '7' or no.nota3 == '8' or no.nota3 == '9' or no.nota3 == '10' or no.nota3 == '01' or no.nota3 == '02' or no.nota3 == '03' or no.nota3 == '04' or no.nota3 == '05' or  no.nota3 == '06' or no.nota3 == '07' or no.nota3 == '08' or no.nota3 == '09' or no.nota3 == '10' %}
                                                         color: rgb(214, 28, 28);
                                                     {% endif %}
-                                                    {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
+                                                    {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
+                                                    {% ifequal no.nota3 'C' %} color: black; font-weight: bold; {% endifequal %}">
                                                             {% if no.nota3 >= '0' %}
                                                                 {% if  no.nota3 == '1' or no.nota3 == '2' or no.nota3 == '3' or no.nota3 == '4' or no.nota3 == '5' or  no.nota3 == '6' or no.nota3 == '7' or no.nota3 == '8' or no.nota3 == '9' or no.nota3 == '10' or no.nota3 == '01' or no.nota3 == '02' or no.nota3 == '03' or no.nota3 == '04' or no.nota3 == '05' or  no.nota3 == '06' or no.nota3 == '07' or no.nota3 == '08' or no.nota3 == '09' or no.nota3 == '10'%}
                                                                 C
@@ -283,14 +276,9 @@
                                                         {% if no.nota4 == '1' or no.nota4 == '2' or no.nota4 == '3' or no.nota4 == '4' or no.nota4 == '5' or  no.nota4 == '6' or no.nota4 == '7' or no.nota4 == '8' or no.nota4 == '9' or no.nota4 == '10' or no.nota4 == '01' or no.nota4 == '02' or no.nota4 == '03' or no.nota4 == '04' or no.nota4 == '05' or  no.nota4 == '06' or no.nota4 == '07' or no.nota4 == '08' or no.nota4 == '09' or no.nota4 == '10' %}
                                                             color: rgb(214, 28, 28);
                                                         {% endif %}
-                                                        {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
-                                                        {% comment %} {% if gradonivel == '5SEC' %}
-                                                            {% if no.nota4 == '1' or no.nota4 == '2' or no.nota4 == '3' or no.nota4 == '4' or no.nota4 == '5' or  no.nota4 == '6' or no.nota4 == '7' or no.nota4 == '8' or no.nota4 == '9' %}
-                                                                0{{ no.nota4 }}
-                                                            {% else %}
-                                                                {{ no.nota4 }}
-                                                            {% endif %}
-                                                        {% else %} {% endcomment %}
+                                                        {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
+                                                        {% ifequal no.nota4 'C' %} color: black; font-weight: bold; {% endifequal %}">
+                                                        
                                                             {% if no.nota4 >= '0' %}
                                                                 {% if  no.nota4 == '1' or no.nota4 == '2' or no.nota4 == '3' or no.nota4 == '4' or no.nota4 == '5' or  no.nota4 == '6' or no.nota4 == '7' or no.nota4 == '8' or no.nota4 == '9' or no.nota4 == '10' or no.nota4 == '01' or no.nota4 == '02' or no.nota4 == '03' or no.nota4 == '04' or no.nota4 == '05' or  no.nota4 == '06' or no.nota4 == '07' or no.nota4 == '08' or no.nota4 == '09' or no.nota4 == '10'%}
                                                                 C
@@ -318,23 +306,6 @@
 
                                                 <!--AQUI CALIFICATIVO FINAL -->
                                                 
-                                                {% comment %} {% if gradonivel == '5SEC' %}
-                                                    <td style="padding-bottom: 0px;
-                                                    -webkit-print-color-adjust: exact;
-                                                    padding-top: 0px;
-                                                    font-size: 8px;
-                                                    text-align: center;
-                                                    vertical-align: middle;padding-left: 3px;font-weight: bold;
-                                                    {% if no.promedio == '1' or no.promedio == '2' or no.promedio == '3' or no.promedio == '4' or no.promedio == '5' or  no.promedio == '6' or no.promedio == '7' or no.promedio == '8' or no.promedio == '9' or no.promedio == 1 or no.promedio == 2 or no.promedio == 3 or no.promedio == 4 or no.promedio == 5 or  no.promedio == 6 or no.promedio == 7 or no.promedio == 8 or no.promedio == 9  or no.promedio == '10' or no.promedio == 10 %}
-                                                        color: rgb(214, 28, 28);
-                                                    {% endif %}
-                                                    {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
-                                                    {% if no.promedio == '1' or no.promedio == '2' or no.promedio == '3' or no.promedio == '4' or no.promedio == '5' or  no.promedio == '6' or no.promedio == '7' or no.promedio == '8' or no.promedio == '9' or no.promedio == 1 or no.promedio == 2 or no.promedio == 3 or no.promedio == 4 or no.promedio == 5 or  no.promedio == 6 or no.promedio == 7 or no.promedio == 8 or no.promedio == 9 %}
-                                                        0{{ no.promedio }}
-                                                    {% else %}
-                                                        {{ no.promedio }}
-                                                    {% endif %}
-                                                {% else %} {% endcomment %}
                                                     <td style="padding-bottom: 0px;
                                                     -webkit-print-color-adjust: exact;
                                                     padding-top: 0px;
@@ -344,7 +315,8 @@
                                                     {% if no.nota4 == '1' or no.nota4 == '2' or no.nota4 == '3' or no.nota4 == '4' or no.nota4 == '5' or  no.nota4 == '6' or no.nota4 == '7' or no.nota4 == '8' or no.nota4 == '9' or no.nota4 == '10' or no.nota4 == '01' or no.nota4 == '02' or no.nota4 == '03' or no.nota4 == '04' or no.nota4 == '05' or  no.nota4 == '06' or no.nota4 == '07' or no.nota4 == '08' or no.nota4 == '09' or no.nota4 == '10' %}
                                                         color: rgb(214, 28, 28);
                                                     {% endif %}
-                                                    {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}">
+                                                    {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
+                                                    {% ifequal no.nota4 'C' %} color: black; font-weight: bold; {% endifequal %}">
                                                     {% if no.nota4 >= '0' %}
                                                         {% if  no.nota4 == '1' or no.nota4 == '2' or no.nota4 == '3' or no.nota4 == '4' or no.nota4 == '5' or  no.nota4 == '6' or no.nota4 == '7' or no.nota4 == '8' or no.nota4 == '9' or no.nota4 == '10' or no.nota4 == '01' or no.nota4 == '02' or no.nota4 == '03' or no.nota4 == '04' or no.nota4 == '05' or  no.nota4 == '06' or no.nota4 == '07' or no.nota4 == '08' or no.nota4 == '09' or no.nota4 == '10'%}
                                                         C
@@ -445,6 +417,91 @@
                             </table>
                         </div>
                     </div><!-- CIERRA ROW APRECIACION TUTOR-->
+
+                    <br/>
+                    <!-- EVALUACION DEL PADRE DE FAMILIA -->
+                    <div class="col-12">           
+                        <table class="" border>
+                            <thead>
+                                <tr class="class-default">
+                                    <th colspan="5" scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    width:1000px;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">EVALUACIÓN DEL PADRE DE FAMILIA</th>
+                                </tr>
+                                <tr class="class-default">
+                                    <th scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">DESCRIPCIÓN</th>
+                                    <th scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;width:50px;">I</th>
+                                    <th style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;width:50px;">II</th>
+                                    <th scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;width:50px;">III</th>
+                                    <th scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;width:50px;">IV</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for no in notas %}
+                                    {% ifequal no.matricula mat.id  %}
+                                        {% ifequal no.tipocurso 'DEL PADRE DE FAMILIA'  %} 
+                                            <tr>
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size: 8px;
+                                                vertical-align: middle;padding-left: 5px;width: 850px;color: black;">{{no.nombrecompetencia}}</td>
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size: 8px;
+                                                text-align: center;
+                                                vertical-align: middle;padding-left: 5px;width:100px;color: black;">{{no.nota}}</td>
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size: 8px;
+                                                text-align: center;
+                                                vertical-align: middle;padding-left: 5px;width:100px;color: black;">{{no.nota2}}</td>
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size:8px;
+                                                text-align: center;
+                                                vertical-align: middle;padding-left: 5px;width:100px;color: black;">{{no.nota3}}</td>
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size: 8px;
+                                                text-align: center;
+                                                vertical-align: middle;padding-left: 5px;width:100px;color: black;">{{no.nota4}}</td>
+                                            </tr>
+
+                                        {% endifequal %}
+                                    {%endifequal%}
+                                {%endfor%}
+                            </tbody>
+
+                        </table><!-- CIERRA EVALUACION DEL PADRE DE FAMILIA -->
+                    </div>
+                    <!-- CIERRA COL6 DEL PADRE DE FAMILIA -->
+
+
+
                 <div class="row" style="margin-top: 10px;"> <!-- INASISTENCIAS Y CLAVE DE EVALUACIÓN -->
                     <div class="col-12">
                         <div class="row">

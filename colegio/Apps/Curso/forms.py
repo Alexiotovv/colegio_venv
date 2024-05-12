@@ -16,7 +16,7 @@ class CursoForm(forms.ModelForm):
 		widgets = {
 		'CodCurso':forms.TextInput(attrs = {'class':'form-control','size':'20'}),
 		'Nombre':forms.TextInput(attrs = {'class':'form-control','size':'80'}),
-		'Orden':forms.TextInput(attrs = {'class':'form-control'}),
+		'Orden':forms.NumberInput(attrs = {'class':'form-control'}),
 		'Nivel':forms.Select(attrs = {'class':'form-control'}),
 		'Tipo':forms.Select(attrs={'class':'form-control'}),
 		'Grados':forms.TextInput(attrs = {'class':'form-control'}),

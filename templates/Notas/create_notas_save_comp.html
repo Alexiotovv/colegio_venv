@@ -55,26 +55,45 @@
                                             {%else%}
                                                 onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
                                             {% endifequal%}
-                                            
-                                        {% endifequal %}
-
-                                        {% ifequal nivel 'PRIM'  %}
-
-                                        <input maxlength="230"
-                                            size="90"
-                                            type="text"
-                                            name="{{ comp.Competencias.id }}"
-                                            id="{{alu.id}}{{ comp.id }}f1"
-                                            class="form-control"
-                                            {%ifequal comp.Competencias.nombre_competencia 'EVALUACIÓN DEL PADRE DE FAMILIA'%}
-                                                onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','EVALUACIÓN DEL PADRE DE FAMILIA');"
-                                            {%else%}
-                                                onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
+                                            {%ifequal comp.Curso.Tipo 'DEL PADRE DE FAMILIA'%}
+                                                list="opciones">
+                                                <datalist id="opciones">
+                                                    <option value="SIEMPRE">
+                                                    <option value="ALGUNAS VECES">
+                                                    <option value="NUNCA">
+                                                </datalist>
+                                                
                                             {%endifequal%}
-                                            onkeyup="activarmodonext('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
-                                            placeholder="Ej. A,B,C, etc">
-                                        {% endifequal %}        
+                                        {% endifequal %}
+                                                
+                                        {% if nivel == 'PRIM' %}
 
+                                            <input maxlength="230"
+                                                size="90"
+                                                type="text"
+                                                name="{{ comp.Competencias.id }}"
+                                                id="{{alu.id}}{{ comp.id }}f1"
+                                                class="form-control"
+                                                {%ifequal comp.Competencias.nombre_competencia 'DEL PADRE DE FAMILIA'%}
+                                                    onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','DEL PADRE DE FAMILIA');"
+                                                    
+                                                {%else%}
+                                                    onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
+                                                {%endifequal%}
+                                                onkeyup="activarmodonext('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');"
+                                                placeholder="Ej. A,B,C, etc"
+                                                {%ifequal comp.Curso.Tipo 'DEL PADRE DE FAMILIA'%}
+                                                
+                                                    list="opciones">
+                                                    <datalist id="opciones">
+                                                        <option value="SIEMPRE">
+                                                        <option value="ALGUNAS VECES">
+                                                        <option value="NUNCA">
+                                                    </datalist>
+                                                
+                                            {%endifequal%}
+                                        {% endif %}        
+                                        
                                     </td>
                                 </tr>
 
@@ -250,10 +269,10 @@
             if (tipo_curso=='DEL PADRE DE FAMILIA') {
                 var nota=document.getElementById(id_elemento).value.trim();
                 nota=nota.toUpperCase();
-                if (nota == 'SI' || nota == 'NO' ){
+                if (nota == 'NUNCA' || nota == 'ALGUNAS VECES' || nota == 'SIEMPRE'){
                     document.getElementById(id_elemento).value=nota.toUpperCase();
                 }else{
-                    alert('Valores válidos: SI, NO');
+                    alert('Valores válidos: NUNCA, ALGUNAS VECES, SIEMPRE');
                     document.getElementById(id_elemento).value=''; 
                     document.getElementById(id_elemento).focus(); 
                 }
@@ -270,55 +289,6 @@
         } 
         
     }
-
-    //function promedio(id,num_compe) {
-        //var elements = document.getElementById("f1").elements;
-        //var sum =0;
-        //var cont=0;
-        //var prom=0;
-        //var cant=0;
-        //var indice_califi = 0;
-        //// var num_compe=document.getElementById("num_compe").value;
-        ////1°Column=IdElemento  / 2°Column=N° Valor o Nota
-        //var array=[[],[],[]];
-        //for (var i = 0, element; element = elements[i++];) {
-            //if (element.type === "text"){
-                //array[0][sum]=element.id;
-                //array[1][sum]=element.value;
-                //cont+=1;
-                //if (cont==num_compe) {
-                    //array[2][sum]=cont;//indice de la competencia
-                    //cont=0;
-                //}else{
-                    //array[2][sum]=cont;//indice de la competencia en caso
-                //}
-                //sum+=1;  
-            //}
-        //}
-        //var prom_final=0;
-        //for (let index = 0; index < array[0].length; index++) {
-            //prom=0;
-            //if(array[0][index]==id){
-                //for (let y = index; y < array[0].length; y++) {
-                    //if (array[2][y]==num_compe) {
-                        //indice_califi=y;
-                        //for (let z = 1; z < num_compe; z++) {
-                            //if (parseInt(array[1][y-z])){
-                                //prom=prom+Number(array[1][y-z]);
-                            //}
-                            //prom_final=Math.round(prom/(num_compe-1));
-                            //if (prom_final<10) {
-                                //prom_final="0"+prom_final.toString();
-                            //}
-                            //document.getElementById(array[0][y]).value=prom_final;
-                        //}
-                        //break;
-                    //}
-                //}
-            //}
-        //}
-        
-    //}
     
     function activarmodonext(id_elemento,tipo_curso) {
         if (tipo_curso=='CURSO' || tipo_curso=='ACTITUDINAL') {

@@ -136,28 +136,52 @@ Listar Avance Notas
                                             <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;vertical-align: middle;padding-left: 10px;">
                                                 {{no.Competencias.nombre_competencia}}</td>
 
-                                                        {% if no.Nota >= '0' %}
-                                                            {% if  no.Nota == '1' or no.Nota == '2' or no.Nota == '3' or no.Nota == '4' or no.Nota == '5' or  no.Nota == '6' or no.Nota == '7' or no.Nota == '8' or no.Nota == '9' or no.Nota == '10' or no.Nota == '01' or no.Nota == '02' or no.Nota == '03' or no.Nota == '04' or no.Nota == '05' or  no.Nota == '06' or no.Nota == '07' or no.Nota == '08' or no.Nota == '09'%}
-                                                                <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center; color: red;color: red;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">C</td>
+                                                    {% if no.Nota >= '0' %}
+                                                        {% if  no.Nota == '1' or no.Nota == '2' or no.Nota == '3' or no.Nota == '4' or no.Nota == '5' or  no.Nota == '6' or no.Nota == '7' or no.Nota == '8' or no.Nota == '9' or no.Nota == '10' or no.Nota == '01' or no.Nota == '02' or no.Nota == '03' or no.Nota == '04' or no.Nota == '05' or  no.Nota == '06' or no.Nota == '07' or no.Nota == '08' or no.Nota == '09'%}
+                                                            <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center; color: red;color: red;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">C</td>
+                                                        {% else %}
+                                                            {% if no.Nota <= '13' %}
+                                                                <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">B</td>
                                                             {% else %}
-                                                                {% if no.Nota <= '13' %}
-                                                                    <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">B</td>
+                                                                {% if no.Nota <= '17' %}
+                                                                    <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">A</td>
                                                                 {% else %}
-                                                                    {% if no.Nota <= '17' %}
-                                                                        <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">A</td>
+                                                                    {% if no.Nota <= '20' %}
+                                                                        <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">AD</td>
                                                                     {% else %}
-                                                                        {% if no.Nota <= '20' %}
-                                                                            <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">AD</td>
+                                                                        {% ifequal no.Nota 'C' %}
+                                                                            <td style="padding-bottom: 0px;
+                                                                                    padding-top: 0px;
+                                                                                    font-size: smaller;
+                                                                                    text-align: center;
+                                                                                    vertical-align: middle;padding-left: 10px;
+                                                                                    color: black;
+                                                                                    font-weight: bold;
+                                                                                    ">
+                                                                                {{ no.Nota }}
+                                                                            </td>
                                                                         {% else %}
-                                                                            <td style="padding-bottom: 0px;padding-top: 0px;font-size: smaller;text-align: center;vertical-align: middle;padding-left: 10px;{% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">{{no.Nota}}</td>
-                                                                        {%endif%}
-                                                                    {% endif %}
+                                                                            <td style="padding-bottom: 0px;
+                                                                                    padding-top: 0px;
+                                                                                    font-size: smaller;
+                                                                                    text-align: center;
+                                                                                    vertical-align: middle;padding-left: 10px;
+                                                                                    {% if no.Nota == 'COMPETENCIA NO DESARROLLADA'%}width: 225px;{% endif %}">
+                                                                                {{ no.Nota }}
+                                                                            </td>
+                                                                        {% endifequal %}
+                                                                        
+                                                                        
+                                                                    {%endif%}
                                                                 {% endif %}
                                                             {% endif %}
                                                         {% endif %}
+                                                    {% endif %}
+                                                    
+
                                         </tr>
-                                        {% endifequal %}
-                                    {% endfor %}
+                            {% endifequal %}
+                        {% endfor %}
                     </tbody>
                 </table>
                             

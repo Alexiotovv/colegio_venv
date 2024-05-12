@@ -15,6 +15,8 @@
 		    <tr>
 		      <th scope="col">Id</th>
 			  <th scope="col">Nivel</th>
+			  <th scope="col">Tipo</th>
+			  <th scope="col">Curso</th>
 		      <th scope="col">Nombre de Competencia</th>
 			  <th scope="col">Estado</th>
 		      <th scope="col">Acciones</th>
@@ -24,7 +26,9 @@
 		      {% for lc in lista_competencias %}
 			      <tr class= "class-default">
 			      	<td>{{ lc.id }}</td>
-					<td>{{ lc.nivel }}</td>
+					  <td>{{ lc.nivel }}</td>
+					  <td>{{ lc.Tipo }}</td>
+					  <td>{{ lc.Nombre }}</td>
 			      	<td>{{ lc.nombre_competencia }}</td>
 					<td>
 						{% if lc.status %}

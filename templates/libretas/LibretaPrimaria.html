@@ -167,7 +167,8 @@
                                                             -webkit-print-color-adjust: exact;
                                                             font-size: 8px;
                                                             text-align: center;
-                                                            color: red;
+                                                            color: black;
+                                                            font-weight: bold;
                                                             vertical-align: middle;padding-left: 3px;font-weight: bold;
                                                             {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225){%endifequal%};
                                                             ">
@@ -193,7 +194,8 @@
                                                             -webkit-print-color-adjust: exact;
                                                             font-size: 8px;
                                                             text-align: center;
-                                                            color: red;
+                                                            color: black;
+                                                            font-weight: bold;
                                                             vertical-align: middle;padding-left: 3px;font-weight: bold;
                                                             {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225){%endifequal%};
                                                             ">
@@ -218,7 +220,8 @@
                                                             -webkit-print-color-adjust: exact;
                                                             font-size: 8px;
                                                             text-align: center;font-weight: bold;
-                                                            color: red;
+                                                            color: black;
+                                                            font-weight: bold;
                                                             vertical-align: middle;padding-left: 3px;
                                                             {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                             ">
@@ -243,7 +246,8 @@
                                                             -webkit-print-color-adjust: exact;
                                                             font-size: 8px;
                                                             text-align: center;font-weight: bold;
-                                                            color: red;
+                                                            color: black;
+                                                            font-weight: bold;
                                                             vertical-align: middle;padding-left: 3px;
                                                             {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                             ">
@@ -268,7 +272,8 @@
                                                                 -webkit-print-color-adjust: exact;
                                                                 font-size: 8px;
                                                                 text-align: center;font-weight: bold;
-                                                                color: red;
+                                                                color: black;
+                                                                font-weight: bold;
                                                                 vertical-align: middle;padding-left: 3px;
                                                                 {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                                 ">
@@ -310,7 +315,8 @@
             <div class="col-6"><!--ABRE SEGUNDO COL6 -->
                 <div class="row">
                     <div class="col-12">
-                        <div class="row"><!-- ABRE ROW ACTITUDINAL Y PADRE DE FAMILIA -->    
+                        <div class="row"><!-- ABRE ROW ACTITUDINAL Y PADRE DE FAMILIA -->
+
                             <div class="col-4">
                                 <table class="" border><!-- EVALUACION ACTITUDINAL -->
                                     <thead>
@@ -387,149 +393,7 @@
                                     </tbody>
 
                                 </table><!-- CIERRA EVALUACION ACTITUDINAL -->
-                            </div> <!-- CIERRA COL -->
-                            
-                            
-                            <div class="col-8">           
-                                <table class="" border><!-- EVALUACION DEL PADRE DE FAMILIA -->
-                                    <thead>
-                                        <tr class="class-default">
-                                            <th colspan="5" scope="col" style="background-color: rgb(226, 225, 225);
-                                            padding-bottom: 0px;
-                                            padding-top: 0px;
-                                            text-align: center;
-                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">EVALUACIÓN DEL PADRE DE FAMILIA</th>
-                                        </tr>
-                                        <tr class="class-default">
-                                            <th scope="col" style="background-color: rgb(226, 225, 225);
-                                            padding-bottom: 0px;
-                                            padding-top: 0px;
-                                            text-align: center;
-                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">DESCRIPCIÓN</th>
-                                            <th scope="col" style="background-color: rgb(226, 225, 225);
-                                            padding-bottom: 0px;
-                                            padding-top: 0px;
-                                            text-align: center;
-                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">I</th>
-                                            <th style="background-color: rgb(226, 225, 225);
-                                            padding-bottom: 0px;
-                                            padding-top: 0px;
-                                            text-align: center;
-                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">II</th>
-                                            <th scope="col" style="background-color: rgb(226, 225, 225);
-                                            padding-bottom: 0px;
-                                            padding-top: 0px;
-                                            text-align: center;
-                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">III</th>
-                                            <th scope="col" style="background-color: rgb(226, 225, 225);
-                                            padding-bottom: 0px;
-                                            padding-top: 0px;
-                                            text-align: center;
-                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">IV</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for no in notas %}
-                                            {% ifequal no.matricula mat.id  %}
-                                                {% ifequal no.tipocurso 'DEL PADRE DE FAMILIA'  %} 
-                                                    <tr>
-                                                        <td style="padding-bottom: 0px;
-                                                        padding-top: 0px;
-                                                        font-size: 8px;
-                                                        vertical-align: middle;padding-left: 5px;width: 550px;color: black;">{{no.nombrecompetencia}}</td>
-                                                        <td style="padding-bottom: 0px;
-                                                        padding-top: 0px;
-                                                        font-size: 8px;
-                                                        text-align: center;
-                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota}}</td>
-                                                        <td style="padding-bottom: 0px;
-                                                        padding-top: 0px;
-                                                        font-size: 8px;
-                                                        text-align: center;
-                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota2}}</td>
-                                                        <td style="padding-bottom: 0px;
-                                                        padding-top: 0px;
-                                                        font-size:8px;
-                                                        text-align: center;
-                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota3}}</td>
-                                                        <td style="padding-bottom: 0px;
-                                                        padding-top: 0px;
-                                                        font-size: 8px;
-                                                        text-align: center;
-                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota4}}</td>
-                                                    </tr>
-
-                                                {% endifequal %}
-                                            {%endifequal%}
-                                        {%endfor%}
-                                    </tbody>
-
-                                </table><!-- CIERRA EVALUACION DEL PADRE DE FAMILIA -->
-                            </div> <!-- CIERRA COL6 DEL PADRE DE FAMILIA -->
-                        </div><!-- CIERRA ROW ACTITUDINAL Y PADRE DE FAMILIA -->
-                    </div><!-- CIERRA COL 12 -->
-                </div><!-- CIERRA ROW -->
-
-                <div class="row" style="margin-top: 10px;"><!-- ABRE ROW -->
-                    <div class="col-12">
-                        <table border id="{{mat.id}}"><!-- APRECIACIÓN DEL TUTOR -->
-                            <input type="text" value="{{mat.id}}" hidden>
-                            <thead>
-                                <tr>
-                                    <th scope="col" style="background-color: rgb(226, 225, 225);
-                                    padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    text-align: center;
-                                    padding-left: 3px;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;width: 70px;color: black;">PERIODO</th>
-
-                                    <th scope="col" style="background-color: rgb(226, 225, 225);
-                                    padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    text-align: center;
-                                    padding-left: 3px;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;width: 1000px;color: black;">APRECIACIÓN DEL TUTOR(A) SOBRE LAS ACTITUDES DEL ALUMNO </th>
-                                </tr>
-                            </thead>
-                        <tbody>
-                            {% for no in apreciaciones %}
-                                {% ifequal no.Matricula.id mat.id  %}
-                                    {% ifequal no.Curso.Tipo 'APRECIACIÓN DEL TUTOR' %} 
-                                    <tr>
-                                        <td style="padding-bottom: 0px;
-                                        padding-top: 0px;
-                                        font-size: 8px;
-                                        vertical-align: middle;padding-left: 3px;color: black;">{{no.PAcademico.Nombre}}</td>
-                                                
-                                            {% if no.PAcademico.id > paca %}
-                                                <td style="padding-bottom: 0px;
-                                                padding-top: 0px;
-                                                font-size: 8px;
-                                                vertical-align: middle;padding-left: 3px;color: black;"></td>
-                                            {% else %}
-                                                <td style="padding-bottom: 0px;
-                                                padding-top: 0px;
-                                                font-size: 8px;
-                                                vertical-align: middle;padding-left: 3px;color: black;">{{no.Nota}}</td>
-                                            {% endif %}    
-                                        
-                                        
-                                    </tr>                              
-                                    {% endifequal %}
-                                {%endifequal%}
-                            {%endfor%}
-                            
-                        </tbody>
-
-                        </table>
-                    </div>
-                </div><!-- CIERRA ROW -->
-
-                <div class="row" style="margin-top: 10px;"> <!-- INASISTENCIAS Y CLAVE DE EVALUACIÓN -->
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-6">
+                                <br>
                                 <table class="" border><!-- INASISTENCIAS -->
                                     <thead>
                                         <tr class="class-default">
@@ -605,7 +469,154 @@
                                     </tbody>
 
                                 </table><!-- CIERRA INASISTENCIAS -->
+
+                                
+
+                            </div> <!-- CIERRA COL -->
+                            
+                            <!-- EVALUACION DEL PADRE DE FAMILIA -->
+                            <div class="col-8">           
+                                <table class="" border>
+                                    <thead>
+                                        <tr class="class-default">
+                                            <th colspan="5" scope="col" style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">EVALUACIÓN DEL PADRE DE FAMILIA</th>
+                                        </tr>
+                                        <tr class="class-default">
+                                            <th scope="col" style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">DESCRIPCIÓN</th>
+                                            <th scope="col" style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">I</th>
+                                            <th style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">II</th>
+                                            <th scope="col" style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">III</th>
+                                            <th scope="col" style="background-color: rgb(226, 225, 225);
+                                            padding-bottom: 0px;
+                                            padding-top: 0px;
+                                            text-align: center;
+                                            -webkit-print-color-adjust: exact;font-size: 8px;color: black;">IV</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for no in notas %}
+                                            {% ifequal no.matricula mat.id  %}
+                                                {% ifequal no.tipocurso 'DEL PADRE DE FAMILIA'  %} 
+                                                    <tr>
+                                                        <td style="padding-bottom: 0px;
+                                                        padding-top: 0px;
+                                                        font-size: 8px;
+                                                        vertical-align: middle;padding-left: 5px;width: 550px;color: black;">{{no.nombrecompetencia}}</td>
+                                                        <td style="padding-bottom: 0px;
+                                                        padding-top: 0px;
+                                                        font-size: 8px;
+                                                        text-align: center;
+                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota}}</td>
+                                                        <td style="padding-bottom: 0px;
+                                                        padding-top: 0px;
+                                                        font-size: 8px;
+                                                        text-align: center;
+                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota2}}</td>
+                                                        <td style="padding-bottom: 0px;
+                                                        padding-top: 0px;
+                                                        font-size:8px;
+                                                        text-align: center;
+                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota3}}</td>
+                                                        <td style="padding-bottom: 0px;
+                                                        padding-top: 0px;
+                                                        font-size: 8px;
+                                                        text-align: center;
+                                                        vertical-align: middle;padding-left: 5px;width:40px;color: black;">{{no.nota4}}</td>
+                                                    </tr>
+
+                                                {% endifequal %}
+                                            {%endifequal%}
+                                        {%endfor%}
+                                    </tbody>
+
+                                </table><!-- CIERRA EVALUACION DEL PADRE DE FAMILIA -->
                             </div>
+                            <!-- CIERRA COL6 DEL PADRE DE FAMILIA -->
+
+                        </div><!-- CIERRA ROW ACTITUDINAL Y PADRE DE FAMILIA -->
+                    </div><!-- CIERRA COL 12 -->
+                </div><!-- CIERRA ROW -->
+
+                <div class="row" style="margin-top: 10px;"><!-- ABRE ROW -->
+                    <div class="col-12">
+                        <table border id="{{mat.id}}"><!-- APRECIACIÓN DEL TUTOR -->
+                            <input type="text" value="{{mat.id}}" hidden>
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    padding-left: 3px;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;width: 70px;color: black;">PERIODO</th>
+
+                                    <th scope="col" style="background-color: rgb(226, 225, 225);
+                                    padding-bottom: 0px;
+                                    padding-top: 0px;
+                                    text-align: center;
+                                    padding-left: 3px;
+                                    -webkit-print-color-adjust: exact;font-size: 8px;width: 1000px;color: black;">APRECIACIÓN DEL TUTOR(A) SOBRE LAS ACTITUDES DEL ALUMNO </th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            {% for no in apreciaciones %}
+                                {% ifequal no.Matricula.id mat.id  %}
+                                    {% ifequal no.Curso.Tipo 'APRECIACIÓN DEL TUTOR' %} 
+                                    <tr>
+                                        <td style="padding-bottom: 0px;
+                                        padding-top: 0px;
+                                        font-size: 8px;
+                                        vertical-align: middle;padding-left: 3px;color: black;">{{no.PAcademico.Nombre}}</td>
+                                                
+                                            {% if no.PAcademico.id > paca %}
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size: 8px;
+                                                vertical-align: middle;padding-left: 3px;color: black;"></td>
+                                            {% else %}
+                                                <td style="padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                font-size: 8px;
+                                                vertical-align: middle;padding-left: 3px;color: black;">{{no.Nota}}</td>
+                                            {% endif %}    
+                                        
+                                        
+                                    </tr>                              
+                                    {% endifequal %}
+                                {%endifequal%}
+                            {%endfor%}
+                            
+                        </tbody>
+
+                        </table>
+                    </div>
+                </div><!-- CIERRA ROW -->
+
+                <div class="row" style="margin-top: 10px;"> <!-- CLAVE DE EVALUACIÓN -->
+                    <div class="col-12">
+                        <div class="row">
+                           
                             <div class="col-6"><!-- CLAVE DE EVALUACIÓN-->
                                 <table class="" border>
                                     <thead>
@@ -623,164 +634,172 @@
                                             <td style="font-size: 9px;text-align: center;width: 40px;padding-bottom: 0px;
                                             padding-top: 0px;">AD</td>
                                             <td style="font-size: 9px;padding-bottom: 0px;
-                                            padding-top: 0px;">LOGRO DESTACADO
+                                            padding-top: 0px;padding-left: 4px;">LOGRO DESTACADO
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="font-size: 9px;text-align: center;padding-bottom: 0px;
                                             padding-top: 0px;">A</td>
                                             <td style="font-size: 9px;padding-bottom: 0px;
-                                            padding-top: 0px;">LOGRO PREVISTO
+                                            padding-top: 0px;padding-left: 4px;">LOGRO PREVISTO
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="font-size: 9px;text-align: center;padding-bottom: 0px;
                                             padding-top: 0px;">B</td>
                                             <td style="font-size: 9px;padding-bottom: 0px;
-                                            padding-top: 0px;">EN PROCESO
+                                            padding-top: 0px;padding-left: 4px;">EN PROCESO
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="font-size: 9px;text-align: center;padding-bottom: 0px;
                                             padding-top: 0px;">C</td>
                                             <td style="font-size: 9px;padding-bottom: 0px;
-                                            padding-top: 0px;">EN INICIO
+                                            padding-top: 0px;padding-left: 4px;">EN INICIO
                                             </td>
                                         </tr>
                                         <tr>
                                             <td style="font-size: 9px;text-align: center;padding-bottom: 0px;
                                             padding-top: 0px;">CND</td>
                                             <td style="font-size: 9px;padding-bottom: 0px;
-                                            padding-top: 0px;">COMPETENCIA NO DESARROLLADA                                            </td>
+                                            padding-top: 0px; padding-left: 4px;" >COMPETENCIA NO DESARROLLADA                                            </td>
                                         </tr>
                                         <tr>
                                             <td style="font-size: 9px;text-align: center;padding-bottom: 0px;
                                             padding-top: 0px;">ND</td>
                                             <td style="font-size: 9px;padding-bottom: 0px;
-                                            padding-top: 0px;">NO DESARROLLÓ
+                                            padding-top: 0px;padding-left: 4px;">NO DESARROLLÓ
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div><!-- CIERRA CLAVE DE EVALUACIÓN-->
+
+
+                                <div class="col-6">
+                                    <!--SITUACIÓN FINAL -->
+                                        <table class="" border>
+                                            <thead><tr><th colspan="2" style="background-color: rgb(226, 225, 225);
+                                                padding-bottom: 0px;
+                                                padding-top: 0px;
+                                                text-align: center;
+                                                -webkit-print-color-adjust: exact;font-size: 8px;width: 250px;font-size: 8px;color: black;">SITUACIÓN FINAL</th></tr></thead>
+                                            <tbody>
+                                                <tr><td style="padding-bottom: 0px;
+                                                    padding-top: 0px;
+                                                    padding-left: 5px;
+                                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
+                                                        PROMOVIDO
+                                                    </td>
+                                                    <td style="padding-bottom: 0px;
+                                                    padding-top: 0px;
+                                                    text-align: center;
+                                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;width: 50px;">
+                                                    {% for sf in SitFinal %}
+                                                        {% if sf.idMat == mat.id %}
+                                                            {% ifequal sf.sitfinal 'PROMOVIDO'  %} 
+                                                                X
+                                                            {% endifequal %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                <tr><td style="padding-bottom: 0px;
+                                                    padding-top: 0px;
+                                                    padding-left: 5px;
+                                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
+                                                    PASA A RECUPERACIÓN
+                                                    </td>
+                                                    <td style="padding-bottom: 0px;
+                                                    padding-top: 0px;
+                                                    text-align: center;
+                                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
+                                                    {% for sf in SitFinal %}
+                                                        {% if sf.idMat == mat.id %}
+                                                            {% ifequal sf.sitfinal 'RECUPERACIÓN'  %} 
+                                                                X
+                                                            {% endifequal %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </td>
+                                                </tr>
+                                                <tr><td style="padding-bottom: 0px;
+                                                    padding-top: 0px;
+                                                    padding-left: 5px;
+                                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
+                                                    REPITE
+                                                    </td>
+                                                    <td style="padding-bottom: 0px;
+                                                    padding-top: 0px;
+                                                    text-align: center;
+                                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
+                                                    {% for sf in SitFinal %}
+                                                        {% if sf.idMat == mat.id %}
+                                                            {% ifequal sf.sitfinal 'REPITE'  %} 
+                                                                X
+                                                            {% endifequal %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    <!--CIERRA SITUACIÓN FINAL -->
+                                       <br>
+                                    <!--CURSOS DE RECUPERACIÓN-->
+                                        <table class="" border>
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="2" style="background-color: rgb(226, 225, 225);
+                                                        padding-bottom: 0px;
+                                                        padding-top: 0px;
+                                                        text-align: center;
+                                                        -webkit-print-color-adjust: exact;font-size: 8px;width: 250px;color: black;">
+                                                        CURSOS RECUPERACIÓN
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td style="padding-bottom: 0px; padding-top: 0px; text-align: center; -webkit-print-color-adjust: exact;font-size: 8px;color: black;width: 50px;">
+                                                    {% for sf in SitFinal %}
+                                                        {% if sf.idMat == mat.id %}
+                                                            <p>{{sf.cursos_recuperacion}}</p>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    </td>
+                                                </tr>    
+                                            </tbody>
+                                        </table>
+                                    <!--CIERRA CURSOS DE RECUPERACIÓN-->
+                                </div>
+
                         </div>
-                    </div>
-                </div><!-- CIERRA INASISTENCIAS  -->
-
-                <div class="row" style="margin-top: 10px;">
-                    <div class="col-6">
-                        <table class="" border>
-                            <thead><tr><th colspan="2" style="background-color: rgb(226, 225, 225);
-                                padding-bottom: 0px;
-                                padding-top: 0px;
-                                text-align: center;
-                                -webkit-print-color-adjust: exact;font-size: 8px;width: 250px;font-size: 8px;color: black;">SITUACIÓN FINAL</th></tr></thead>
-                            <tbody>
-                                <tr><td style="padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    padding-left: 5px;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
-                                        PROMOVIDO
-                                    </td>
-                                    <td style="padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    text-align: center;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;width: 50px;">
-                                    {% for sf in SitFinal %}
-                                        {% if sf.idMat == mat.id %}
-                                            {% ifequal sf.sitfinal 'PROMOVIDO'  %} 
-                                                X
-                                            {% endifequal %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                </tr>
-                                <tr><td style="padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    padding-left: 5px;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
-                                    PASA A RECUPERACIÓN
-                                    </td>
-                                    <td style="padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    text-align: center;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
-                                    {% for sf in SitFinal %}
-                                        {% if sf.idMat == mat.id %}
-                                            {% ifequal sf.sitfinal 'RECUPERACIÓN'  %} 
-                                                X
-                                            {% endifequal %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                </tr>
-                                <tr><td style="padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    padding-left: 5px;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
-                                    REPITE
-                                    </td>
-                                    <td style="padding-bottom: 0px;
-                                    padding-top: 0px;
-                                    text-align: center;
-                                    -webkit-print-color-adjust: exact;font-size: 8px;color: black;">
-                                    {% for sf in SitFinal %}
-                                        {% if sf.idMat == mat.id %}
-                                            {% ifequal sf.sitfinal 'REPITE'  %} 
-                                                X
-                                            {% endifequal %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="col-6">
-                        <br>
-                        <table class="" border>
-                            <thead>
-                                <tr>
-                                    <th colspan="2" style="background-color: rgb(226, 225, 225);
-                                        padding-bottom: 0px;
-                                        padding-top: 0px;
-                                        text-align: center;
-                                        -webkit-print-color-adjust: exact;font-size: 8px;width: 250px;color: black;">
-                                        CURSOS RECUPERACIÓN
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td style="padding-bottom: 0px; padding-top: 0px; text-align: center; -webkit-print-color-adjust: exact;font-size: 8px;color: black;width: 50px;">
-                                    {% for sf in SitFinal %}
-                                        {% if sf.idMat == mat.id %}
-                                            <p>{{sf.cursos_recuperacion}}</p>
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                </tr>    
-                            </tbody>
-                        </table>
+        
+        
                         
                     </div>
+                    </div>
 
-
-                </div>
-
-                <div class="row" style="margin-top: 20px;"><!-- ROW DE LAS FIRMAS -->
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-6" style="text-align: -webkit-center;">
-                                <img src="/static/img/firma_maria.png" alt="" style="width: 180px;">           
-                            </div>
-                            <div class="col-6" style="align-items: center;text-align: -webkit-center;">
-                                <img src="/static/img/firma_segundo.png" alt="" style="width: 180px;">
+                    <div class="row" style="margin-top: 20px;"><!-- ROW DE LAS FIRMAS -->
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-6" style="text-align: -webkit-center;">
+                                    <img src="/static/img/firma_maria.png" alt="" style="width: 180px;">           
+                                </div>
+                                <div class="col-6" style="align-items: center;text-align: -webkit-center;">
+                                    <img src="/static/img/firma_segundo.png" alt="" style="width: 180px;">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div><!-- CIERRA ROW DE LAS FIRMAS -->
+                    </div><!-- CIERRA ROW DE LAS FIRMAS -->
+                    
+                </div><!-- CIERRA CLAVE DE EVALUACIÓN  -->
+
+
+                
+
+            
 
 
             </div><!--CIERRA SEGUNDO COL6 -->

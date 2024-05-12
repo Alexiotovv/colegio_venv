@@ -466,11 +466,6 @@ def ImprimirNotasSecundaria(request):
                     if n['competencia']==n4['competencia'] and  n['curso']==n4['curso'] and n['matricula']==n4['matricula']:
                         n['nota4']=n4['nota']
         
-        ########solo se usa para la situación final
-        # SitFinalbim4="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia=%s"
-        # cursor.execute(SitFinalbim4,[ano,gradonivel,seccion,nivelcorto,'CALIFICATIVO DE ÁREA'])
-        # SitFinalnotas4 = dictfetchall(cursor)
-        #######end para situacion final
         
         ########solo se usa para situacion final 2023 Modificado 19/dic/2023
         SitFinalbim4_2023="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso,n4.nombrecompetencia from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.tipocurso=%s and n4.nombrecompetencia<>%s"
@@ -479,16 +474,16 @@ def ImprimirNotasSecundaria(request):
         #######end para situacion final
         
         ##Para promedio Final de 5Sec
-        if gradonivel=='1SEC' or gradonivel=='2SEC' or gradonivel=='3SEC' or gradonivel=='4SEC' or gradonivel=='5SEC' and paca==5:
+        #if gradonivel=='1SEC' or gradonivel=='2SEC' or gradonivel=='3SEC' or gradonivel=='4SEC' or gradonivel=='5SEC' and paca==5:
         #     prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
         #     notas=prom_quinto
         #     SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,notas,gradonivel)
         #     SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
         # else:
             # SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel)
-            SitFinal=SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
+        SitFinal=SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
 
-        contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta de avance
+        contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta
         return render(request,'libretas/LibretaSecundaria.html',contexto2)
     else:
         return render(request,'otras_opciones/imprimir_libreta_secundaria.html',contexto)

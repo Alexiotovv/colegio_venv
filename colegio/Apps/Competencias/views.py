@@ -25,8 +25,14 @@ def GrabarCompetencias(request,curso_id):
 		return render(request,'competencias/asignar_competencias.html',contexto)
 
 def ListarCompetencias(request):
-	lista_competencias=Competencias.objects.all()
+	lista_competencias = CompetenciaCurso.objects.raw( '\
+    	SELECT co."id",cu."Tipo",cu."Nombre",co."nivel",co."nombre_competencia", co."Orden", co."status" FROM "Competencias_competenciacurso" cc \
+		LEFT JOIN "Competencias_competencias" co on co."id"=cc."Competencias_id" \
+      	LEFT JOIN "Curso_curso" cu on cu."id"=cc."Curso_id" \
+     ')
+ 
 	return render(request,'competencias/listar_competencias.html',{'lista_competencias':lista_competencias})
+
 def EliminarCompetencias(request,id):
 	Competencias.objects.filter(id=id).delete()
 	lista_competencias=Competencias.objects.all()
@@ -49,13 +55,22 @@ def EditarCompetencias(request,id):
 		return render(request,'competencias/editar_competencias.html',contexto)
 
 # def EliminarCursoCompetencia(idcomcur):
-# 	CompetenciaCurso.objects.filter(id=idcomcur).delete()
+# 	CompetenciaCurso.objects.filter(id=idcomcur).delete()d
 # 	return render('competencias/listar_competencias.html')
 	
 	#return redirect('app_lista_curso')
 	
-class NuevaCompetencia(CreateView):
-	model=Competencias
-	form_class= CompetenciasForm
-	template_name='competencias/nueva_competencia.html'
-	success_url='/competencias/nueva_competencia/'
+def NuevaCompetencia(request):
+    if request.method=='POST':
+        obj = Competencias()
+        print(request.POST.get("nombre_competencia"))
+        obj.nombre_competencia=request.POST.get("nombre_competencia")
+        obj.nivel=request.POST.get("nivel")
+        obj.Orden=request.POST.get("Orden")
+        obj.status=True
+        obj.save()
+        return render(request,'competencias/nueva_competencia.html')
+    else:
+    	return render(request,'competencias/nueva_competencia.html')
+     
+	

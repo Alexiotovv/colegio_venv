@@ -7,12 +7,14 @@
 		{% csrf_token %}
 		<h6>Nueva Competencias</h6>
 		<label for="">Nombre de Competencia</label>
-        {{form.nombre_competencia}}
+        <input type='text' id='nombre_competencia' name='nombre_competencia' class="form-control">
         <label for="">Nivel de Competencia</label>
-        {{form.nivel}}
+        <select name="nivel" id="nivel"  class="form-control">
+            <option value="PRIM">PRIM</option>
+            <option value="SEC">SEC</option>
+        </select>
         <label for="">Orden de Competencia</label>
-        {{form.Orden}}
-
+        <input type='text' id='Orden' name='Orden' class="form-control">
         <br>
         <button type="submit" class="btn btn-success">Guardar</button>
 	</form>
