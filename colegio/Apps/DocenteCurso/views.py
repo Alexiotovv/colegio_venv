@@ -13,10 +13,7 @@ def DocenteListarAsginaciones(request):
 
 def DocenteCursoCreate(request,id_docente):
 	docente = Docente.objects.get(id=id_docente)
-	docente_list = DocenteCurso.objects.filter(Docente__id=id_docente)
-	form = DocenteCursoForm()		
-	contexto = {'doce':docente,'form':form, 'doce_list':docente_list}
-
+	excluidos=[]
 	if request.method=='POST':
 		docecur=DocenteCurso()
 		
@@ -29,9 +26,22 @@ def DocenteCursoCreate(request,id_docente):
 		docecur.Docente = doce
 
 		docecur.save()
+  
+		docente_list = DocenteCurso.objects.filter(Docente__id=id_docente)
+		
+		for x in docente_list:
+			excluidos.append(x.Curso_id)
+		lista_cursos = Curso.objects.exclude(id__in=excluidos)
+	
+		contexto = {'doce':docente, 'doce_list':docente_list,'lista_cursos':lista_cursos}
+  
 		return render(request,'docentecurso/create_docentecurso.html',contexto)
 	else:
-		
+		docente_list = DocenteCurso.objects.filter(Docente__id=id_docente)
+		for x in docente_list:
+			excluidos.append(x.Curso_id)
+		lista_cursos = Curso.objects.exclude(id__in=excluidos)
+		contexto = {'doce':docente, 'doce_list':docente_list,'lista_cursos':lista_cursos}
 		return render(request,'docentecurso/create_docentecurso.html',contexto)
 
 class DocenteCursoDelete(DeleteView):

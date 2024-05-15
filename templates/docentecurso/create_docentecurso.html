@@ -8,7 +8,13 @@
 	<div class="row">
 	<div class="col-md-6 col-lg-6 col-xs-6">
 		<label>Seleccione Evaluación</label>
-		{{form.Curso}}
+		<!-- {{form.Curso}} -->
+		<select name="Curso" id="Curso" class="form-select">
+			{% for cur in lista_cursos %}
+				<option value="{{cur.id}}">{{cur.Nivel}} - {{cur.CodCurso}} - {{cur.Nombre}}</option>
+			{% endfor %}
+
+		</select>
 	</div>
 	<div class="col-md-6 col-lg-6 col-xs-6">
 		<br>
