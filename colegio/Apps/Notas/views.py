@@ -251,29 +251,26 @@ def ConsolidadoNotas(request):
 		cursos= CompetenciaCurso.objects.filter(Curso__Nivel=nivel).exclude(Curso__Tipo='--').order_by('Curso__Orden','Competencias__Orden')
 		
 		###Mi funcion estrella que hace la granputa colocacion en el excel
-		if final == '1':
-			InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos)#funcion que coloca las notas en el excel se encuentra mas abajo
+		if final == '0':
+			InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos,registrar_orden_merito,request.user.id,paca)
 		else:			
-			InsertaNotasEnExcelPromedio(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos,registrar_orden_merito,request.user.id,paca)#funcion que coloca las notas en el excel se encuentra mas abajo
+			InsertaNotasEnExcelPromedio(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos,registrar_orden_merito,request.user.id,paca)
 		
 		############################################3
 		if str(nivel).find("PRIM")!= -1:
-			if final == '1':
+			if final == '0':
 				return redirect("https://colcoopcv.com/static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx")
-				#return redirect("/static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx")
+				# return redirect("/static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx")
 			else:
 				return redirect("https://colcoopcv.com/static/files/PLANTILLA_LIBRETA_PRIMARIA_R.xlsx")
-				#return redirect("/static/files/PLANTILLA_LIBRETA_PRIMARIA_R.xlsx")
+				# return redirect("/static/files/PLANTILLA_LIBRETA_PRIMARIA_R.xlsx")
 		else:
-			if final=='1':
-				return redirect("https://colcoopcv.com/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx")
-				#return redirect("/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx")
+			if final=='0' and registrar_orden_merito=='on':
+				return redirect('app_consolidado_libretas')
 			else:
-				if registrar_orden_merito=='on':
-					return redirect('app_consolidado_libretas')
-				else:
-					return redirect("https://colcoopcv.com/static/files/PLANTILLA_LIBRETA_SECUNDARIA_R.xlsx")
-					# return redirect("/static/files/PLANTILLA_LIBRETA_SECUNDARIA_R.xlsx")
+				return redirect("https://colcoopcv.com/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx")
+				# return redirect("/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx")
+			
 	else:
 		contexto={'aac':aac,'pac':pac}
 		return render(request,'otras_opciones/imprimir_consolidado_libretas.html',contexto)
@@ -707,23 +704,26 @@ def EstadoValor(obj):
   
 	return (devuelve)
 
-def InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos):
+def InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos,registrar_orden_merito,idusuario,paca):
 	#LIMPIANDO TODAS LAS CELDAS################
-	if str(nivel)=='SEC':		
+	if str(nivel)=='SEC':
 		Ruta = "/var/www/vhosts/colegio_venv/colegio/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx"
-		# Ruta = "static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx"
-
+		#Ruta = "static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx"
+		columnas_excluir=[8,12,16,20,23,27,30,34,37,41,43,60]#columnas a exluir de la limpieza x k contiene la fórmula
+		columnas_notas=[4,5,6,7,9,10,11,13,14,15,17,18,19,21,22,24,25,26,28,29,31,32,33,35,36,38,39,40,42]
+		columnas_puntajes=[8,12,16,20,23,27,30,34,37,41,43]
 		Libro =load_workbook(Ruta)			
 		Hoja1 = Libro.active
 		fila=6
 		col=3
 		Hoja1["C3"]=""#Limpiando PeriodoAcademico Grado y Seccion
-		for filas in range(7,65):#LIMPIANDO_FILAS
+		for filas in range(7,67):#LIMPIANDO_FILAS
 			Hoja1["B"+str(filas)]=""
-			Hoja1.cell(row=4,column=filas-3,value="")
-			Hoja1.cell(row=5,column=filas-3,value="")
+			Hoja1.cell(row=4,column=filas-3,value="")#nombre de los cursos
+			Hoja1.cell(row=5,column=filas-3,value="")#nombres de las competencias
 			Hoja1.cell(row=6,column=filas-3,value="")
-			for columnas in range(2,65):#LIMPIANDO_COLUMNAS
+			
+			for columnas in range(2,67):#LIMPIANDO_COLUMNAS
 				Hoja1.cell(row=filas,column=columnas,value="")
 			
 		Hoja1["C3"]=periodo+" - "+gradonivel+" - "+seccion
@@ -744,20 +744,32 @@ def InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,pe
 		
 		colnota=3
 		for mat in matriculas:#recorre cada fila
+			letras_competencias=[]
 			fila+=1
 			colnota+=1
 			Hoja1["B"+str(fila)] = mat.Alumno.DNI
 			Hoja1["C"+str(fila)] = mat.Alumno.ApellidoPaterno+" "+mat.Alumno.ApellidoMaterno+" "+mat.Alumno.Nombres
 			for obj in consolidado_notas:
+				
 				if mat.id == obj.Matricula.id:
 					for colcur in range(4,col+1):
+						if colcur in columnas_puntajes:
+							valor=calc_competencias_letras(letras_competencias)
+							Hoja1.cell(row=fila,column=colcur,value=valor)	
+								
 						if obj.Curso.Nombre==Hoja1.cell(row=4,column=colcur).value and obj.Competencias.nombre_competencia==Hoja1.cell(row=5,column=colcur).value:##para saber si cambia curso
-							Hoja1.cell(row=fila,column=colcur,value=obj.Nota)	
+							# if colcur in columnas_notas:#pregunta si las notas que va calcular corresponden a las columnas
+							
+							letras_competencias.append(obj.Nota)
+							
+							Hoja1.cell(row=fila,column=colcur,value=obj.Nota)
+		#print()
 		Libro.save(Ruta)
-  
+		if registrar_orden_merito=='on':
+			funcion_registrar_orden_merito(Ruta,idusuario,paca)
 	else:
 		Ruta = "/var/www/vhosts/colegio_venv/colegio/static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx"
-		#Ruta = "static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx"
+		# Ruta = "static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx"
 
 		Libro =load_workbook(Ruta)			
 		Hoja1 = Libro.active
@@ -805,156 +817,135 @@ def InsertaNotasEnExcelPromedio(consolidado_notas,matriculas,nivel,gradonivel,se
 	#LIMPIANDO TODAS LAS CELDAS################
 	if str(nivel)=='SEC':		
 		Ruta = "/var/www/vhosts/colegio_venv/colegio/static/files/PLANTILLA_LIBRETA_SECUNDARIA_R.xlsx"
-		# Ruta = "static/files/PLANTILLA_LIBRETA_SECUNDARIA_R.xlsx"
-		Libro =load_workbook(Ruta)			
-		Hoja1 = Libro.active
-		fila=6
-		col=4
-		Hoja1["C3"]=""#Limpiando PeriodoAcademico Grado y Seccion
-		# for colu in range(4,11):
-		# 	Hoja1.unmerge_cells(start_row=4,start_column=colu,end_row=4,end_column=colu+1)
-		# 	Hoja1.unmerge_cells(start_row=5,start_column=colu,end_row=5,end_column=colu+1)
 
-		for filas in range(7,65):#LIMPIANDO_FILAS
-			Hoja1["B"+str(filas)]=""
-			Hoja1["C"+str(filas)]=""
-			Hoja1["D"+str(filas)]=""
-			Hoja1["F"+str(filas)]=""
-			Hoja1["H"+str(filas)]=""
-			Hoja1["J"+str(filas)]=""
-			Hoja1["L"+str(filas)]=""
-			Hoja1["N"+str(filas)]=""
-			Hoja1["P"+str(filas)]=""
-			Hoja1["R"+str(filas)]=""
-			Hoja1["T"+str(filas)]=""
-			Hoja1["V"+str(filas)]=""
-			Hoja1["X"+str(filas)]=""
-			Hoja1["AB"+str(filas)]=""
-			Hoja1["AD"+str(filas)]=""
-			Hoja1["AA"+str(filas)]=""
-		# for columnas in range(2,20):
-		# 	Hoja1.cell(row=4,column=columnas+2,value="")
-		# 	Hoja1.cell(row=5,column=columnas+2,value="")
-		# 	Hoja1.cell(row=6,column=columnas+2,value="")
+		# Ruta_notas = "static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx"
+  		# Ruta = "static/files/PLANTILLA_LIBRETA_SECUNDARIA_R.xlsx" 
+		# Libro =load_workbook(Ruta)
+		# Hoja1 = Libro.active
+		# fila=6
+		# col=4
+		# Hoja1["C3"]=""#Limpiando PeriodoAcademico Grado y Seccion
+
+		# for filas in range(7,65):#LIMPIANDO_FILAS
+		# 	Hoja1["B"+str(filas)]=""
+		# 	Hoja1["C"+str(filas)]=""
+		# 	Hoja1["D"+str(filas)]=""
+		# 	Hoja1["F"+str(filas)]=""
+		# 	Hoja1["H"+str(filas)]=""
+		# 	Hoja1["J"+str(filas)]=""
+		# 	Hoja1["L"+str(filas)]=""
+		# 	Hoja1["N"+str(filas)]=""
+		# 	Hoja1["P"+str(filas)]=""
+		# 	Hoja1["R"+str(filas)]=""
+		# 	Hoja1["T"+str(filas)]=""
+		# 	Hoja1["V"+str(filas)]=""
+		# 	Hoja1["X"+str(filas)]=""
+		# 	Hoja1["AB"+str(filas)]=""
+		# 	Hoja1["AD"+str(filas)]=""
+		# 	Hoja1["AA"+str(filas)]=""
 			
-			# for columnas in range(2,65):#LIMPIANDO_COLUMNAS
-			# Hoja1.cell(row=filas,column=columnas,value="")
-			
-		Hoja1["C3"]=periodo+" - "+gradonivel+" - "+seccion
+		# Hoja1["C3"]=periodo+" - "+gradonivel+" - "+seccion
 		
-		#poniendo los cursos y las competencias en los encabezados del excel
-		cursocambio=''
-		compe=0
-		for cur in cursos:
-			if cur.Competencias.nombre_competencia=='CALIFICATIVO DE ÁREA' :
-				Hoja1.cell(row=4,column=col,value=cur.Curso.Nombre)
-				Hoja1.cell(row=5,column=col,value=cur.Competencias.nombre_competencia)
+		# #poniendo los cursos y las competencias en los encabezados del excel
+		# cursocambio=''
+		# compe=0
+		# for cur in cursos:
+		# 	if cur.Competencias.nombre_competencia=='CALIFICATIVO DE ÁREA' :
+		# 		Hoja1.cell(row=4,column=col,value=cur.Curso.Nombre)
+		# 		Hoja1.cell(row=5,column=col,value=cur.Competencias.nombre_competencia)
 				
-				if cursocambio!=cur.Curso.Nombre:
-					cursocambio=cur.Curso.Nombre
-					compe=1
-				else:
-					compe+=1
-				Hoja1.cell(row=6,column=col,value='C'+str(compe))
-				col+=2
+		# 		if cursocambio!=cur.Curso.Nombre:
+		# 			cursocambio=cur.Curso.Nombre
+		# 			compe=1
+		# 		else:
+		# 			compe+=1
+		# 		Hoja1.cell(row=6,column=col,value='C'+str(compe))
+		# 		col+=2
 			
-			if cur.Competencias.nombre_competencia=='APRECIACIÓN DEL TUTOR':
-				Hoja1["AD4"]=cur.Curso.Nombre
-				col+=2
-				# Hoja1["AD5"]=cur.Competencias.nombre_competencia
+		# 	if cur.Competencias.nombre_competencia=='APRECIACIÓN DEL TUTOR':
+		# 		Hoja1["AD4"]=cur.Curso.Nombre
+		# 		col+=2
+		# 		# Hoja1["AD5"]=cur.Competencias.nombre_competencia
 			
-			if cur.Competencias.nombre_competencia=='COMPORTAMIENTO':
-				Hoja1["AB4"]=cur.Curso.Nombre
-				col+=2
+		# 	if cur.Competencias.nombre_competencia=='COMPORTAMIENTO':
+		# 		Hoja1["AB4"]=cur.Curso.Nombre
+		# 		col+=2
 
-			if cur.Competencias.nombre_competencia=='ORDEN DE MÉRITO':
-				Hoja1["AA4"]=cur.Curso.Nombre
-				col+=1
-				# Hoja1["AB5"]=cur.Competencias.nombre_competencia
-						
-				# Hoja1.merge_cells(start_row=4,start_column=col,end_row=4,end_column=col+1)
-				# Hoja1.merge_cells(start_row=5,start_column=col,end_row=5,end_column=col+1)
-				
+		# 	if cur.Competencias.nombre_competencia=='ORDEN DE MÉRITO':
+		# 		Hoja1["AA4"]=cur.Curso.Nombre
+		# 		col+=1				
 		
-		colnota=3
-		for mat in matriculas:#recorre cada fila
-			fila+=1
-			colnota+=1
-			Hoja1["B"+str(fila)] = mat.Alumno.DNI
-			Hoja1["C"+str(fila)] = mat.Alumno.ApellidoPaterno+" "+mat.Alumno.ApellidoMaterno+" "+mat.Alumno.Nombres
-			for obj in consolidado_notas:
-				if mat.id == obj.Matricula.id:
-					for colcur in range(2,col+1):
-						if obj.Curso.Nombre==Hoja1.cell(row=4,column=colcur).value and obj.Competencias.nombre_competencia==Hoja1.cell(row=5,column=colcur).value:##para saber si cambia curso
-							Hoja1.cell(row=fila,column=colcur,value=obj.Nota)
-		Libro.save(Ruta)
+		# colnota=3
+		# for mat in matriculas:#recorre cada fila
+		# 	fila+=1
+		# 	colnota+=1
+		# 	Hoja1["B"+str(fila)] = mat.Alumno.DNI
+		# 	Hoja1["C"+str(fila)] = mat.Alumno.ApellidoPaterno+" "+mat.Alumno.ApellidoMaterno+" "+mat.Alumno.Nombres
+		# 	for obj in consolidado_notas:
+		# 		if mat.id == obj.Matricula.id:
+		# 			for colcur in range(2,col+1):
+		# 				if obj.Curso.Nombre==Hoja1.cell(row=4,column=colcur).value and obj.Competencias.nombre_competencia==Hoja1.cell(row=5,column=colcur).value:##para saber si cambia curso
+		# 					Hoja1.cell(row=fila,column=colcur,value=obj.Nota)
+		# Libro.save(Ruta)
 
+
+		if registrar_orden_merito =='on':
+			#Desde aquí empieza el orde de mérito.			
+			df_notas= pd.read_excel(Ruta_notas, engine='openpyxl')
+			#3=MAT, 4=COM, 5=ING, 7=CHI, 9=ART, 11=ART,13=CCS,15=DPCC,17=EFIS,19=EREL,21=CYT,23=EETRAB
+			#col_selec=[1,2,3,5,7,9,11,13,15,17,19,21,23]
+			col_selec=[1,2,38,12,16,20,23,27,30,34,37,41,43,60]#columnas a exluir de la limpieza x k contiene la fórmula
+			df_notas=df_notas.iloc[5:,[1,2,7,11]]
+			# df_notas=df_notas.iloc[:,[1,2,12]]
 			
-		df_notas= pd.read_excel(Ruta, engine='openpyxl')
-		#3=MAT, 4=COM, 5=ING, 7=CHI, 9=ART, 11=ART,13=CCS,15=DPCC,17=EFIS,19=EREL,21=CYT,23=EETRAB
-		col_selec=[1,2,3,5,7,9,11,13,15,17,19,21,23]
-		df_notas=df_notas.iloc[5:,col_selec]
-		col_names=['dni','nombre','mat','com','ing','chi','art','ccs','dpcc','efis','erel','cyt','etrab']
-		df_notas.columns=col_names
-		df_notas['puntaje'] = (
-			pd.to_numeric(df_notas['mat'], errors='coerce') +
-			pd.to_numeric(df_notas['com'], errors='coerce') +
-			pd.to_numeric(df_notas['ing'], errors='coerce') +
-			pd.to_numeric(df_notas['chi'], errors='coerce') +
-			pd.to_numeric(df_notas['art'], errors='coerce') +
-			pd.to_numeric(df_notas['ccs'], errors='coerce') +
-			pd.to_numeric(df_notas['dpcc'], errors='coerce') +
-			pd.to_numeric(df_notas['efis'], errors='coerce') +
-			pd.to_numeric(df_notas['erel'], errors='coerce') +
-			pd.to_numeric(df_notas['cyt'], errors='coerce') +
-			pd.to_numeric(df_notas['etrab'], errors='coerce')
-		)
-
-		columnas_numericas = ['mat', 'com', 'cyt', 'ccs']
-		df_notas[columnas_numericas] = df_notas[columnas_numericas].apply(pd.to_numeric, errors='coerce')
-		# Define el orden de las columnas
-		# Ordenar el DataFrame por 'puntaje', 'mat', 'com', 'cyt', 'ccs' de mayor a menor
-		orden_columnas = ['puntaje', 'mat', 'com', 'cyt', 'ccs']
-		df_notas = df_notas.sort_values(by=orden_columnas, ascending=False)
-		# Agregar una nueva columna 'orden de mérito' enumerando desde 1
-
-		# df_notas['Nota'] = range(1, len(df_notas) + 1)#esto es el orden de merito
-		df_notas['Nota'] = [f"{numero}°" for numero in range(1, len(df_notas) + 1)]
-
-		# Obtén una lista de DNIs del DataFrame
-		lista_dnies = df_notas['dni'].tolist()
-		# Realiza una consulta para obtener los IDs de los alumnos cuyos DNIs coinciden
-		alumnos = Matricula.objects.filter(Alumno__DNI__in=lista_dnies).values('id', 'Alumno__DNI')
-		# Crea un diccionario que mapee DNIs a IDs de alumnos
-		dni_to_matricula_id = {alumno['Alumno__DNI']: alumno['id'] for alumno in alumnos}
-		# Agrega una nueva columna 'Alumno_id' al DataFrame df_alumnos usando el diccionario
-		df_notas['Matricula_id'] = df_notas['dni'].map(dni_to_matricula_id)
+   
+		# col_names=['dni','nombre','mat','com','ing','chi','art','ccs','dpcc','efis','erel','cyt','etrab']
+		# df_notas.columns=col_names
 		
-		df_notas = df_notas.dropna()#elimina registraos NAN
-		df_notas['Matricula_id'] = df_notas['Matricula_id'].astype(int)
+  		# # Define el orden de las columnas
+		
+  		# # Ordenar el DataFrame por 'puntaje', 'mat', 'com', 'cyt', 'ccs' de mayor a menor
+		# orden_columnas = ['mat','com','ing','chi','art','ccs','dpcc','efis','erel','cyt','etrab']
+		# # df_notas = df_notas.sort_values(by=orden_columnas, ascending=False)
+		
+		# # Agregar una nueva columna 'orden de mérito' enumerando desde 1
+		# df_notas['Nota'] = [f"{numero}°" for numero in range(1, len(df_notas) + 1)]
 
-		df_notas['Curso_id']=18
-		df_notas['Competencias_id']=88
-		df_notas['Docente_id']=idusuario
-		df_notas['PAcademico_id']=paca
+		# # Obtén una lista de DNIs del DataFrame
+		# lista_dnies = df_notas['dni'].tolist()
+		# # Realiza una consulta para obtener los IDs de los alumnos cuyos DNIs coinciden
+		# alumnos = Matricula.objects.filter(Alumno__DNI__in=lista_dnies).values('id', 'Alumno__DNI')
+		# # Crea un diccionario que mapee DNIs a IDs de alumnos
+		# dni_to_matricula_id = {alumno['Alumno__DNI']: alumno['id'] for alumno in alumnos}
+		
+  		# # Agrega una nueva columna 'Alumno_id' al DataFrame df_alumnos usando el diccionario
+		# df_notas['Matricula_id'] = df_notas['dni'].map(dni_to_matricula_id)
+		
+		# df_notas = df_notas.dropna()#elimina registraos NAN
+		# df_notas['Matricula_id'] = df_notas['Matricula_id'].astype(int)
 
-		df_nuevo=df_notas[['Matricula_id','Curso_id','Competencias_id','Docente_id','PAcademico_id','Nota']]
-		#Verificar si existen registros antes de registrar
-		idmatricula=df_nuevo['Matricula_id'].iloc[0]
-		registros=list(NotasComp.objects.filter(Competencias_id=88,Curso_id=18,Matricula_id=idmatricula,PAcademico_id=paca).values('id'))
-		if registrar_orden_merito=='on':
-			
-			if len(registros)>0:
-				return redirect('app_consolidado_libretas')
-			else:
-				# Convertir el DataFrame a un diccionario de registros
-				nuevos_registros = df_nuevo.to_dict(orient='records')
-				# Utilizar bulk_create() para insertar los registros en el modelo de Django
-				NotasComp.objects.bulk_create([NotasComp(**registro) for registro in nuevos_registros])
+		# df_notas['Curso_id']=18
+		# df_notas['Competencias_id']=88
+		# df_notas['Docente_id']=idusuario
+		# df_notas['PAcademico_id']=paca
+
+		# df_nuevo=df_notas[['Matricula_id','Curso_id','Competencias_id','Docente_id','PAcademico_id','Nota']]
+		
+  		# #Verificar si existen registros antes de registrar
+		# idmatricula=df_nuevo['Matricula_id'].iloc[0]
+		# registros=list(NotasComp.objects.filter(Competencias_id=88,Curso_id=18,Matricula_id=idmatricula,PAcademico_id=paca).values('id'))
+		# if registrar_orden_merito=='on':
+		# 	if len(registros)>0:
+		# 		return redirect('app_consolidado_libretas')
+		# 	else:
+		# 		# Convertir el DataFrame a un diccionario de registros
+		# 		nuevos_registros = df_nuevo.to_dict(orient='records')
+		# 		# Utilizar bulk_create() para insertar los registros en el modelo Notascomp
+		# 		NotasComp.objects.bulk_create([NotasComp(**registro) for registro in nuevos_registros])
 		
 	else:
 		Ruta = "/var/www/vhosts/colegio_venv/colegio/static/files/PLANTILLA_LIBRETA_PRIMARIA_R.xlsx"
-		#Ruta = "static/files/PLANTILLA_LIBRETA_PRIMARIA_R.xlsx"
+		# Ruta = "static/files/PLANTILLA_LIBRETA_PRIMARIA_R.xlsx"
 		Libro =load_workbook(Ruta)			
 		Hoja1 = Libro.active
 		fila=6
@@ -1025,3 +1016,97 @@ def InsertaNotasEnExcelPromedio(consolidado_notas,matriculas,nivel,gradonivel,se
 								Hoja1.cell(row=fila,column=colcur,value=obj.Nota)	
 		Libro.save(Ruta)
 
+
+
+
+from decimal import Decimal
+
+def calc_competencias_letras(lista):
+    suma=0
+    cant_competencias=0
+    valor_final=0
+    for x in lista:
+        
+        if x =="":
+            continue
+        else:
+            if x=="AD":
+                suma= suma+4
+            if x=="A":
+                suma=suma+3
+            if x=="B":
+                suma=suma+2.5
+            if x=="C":
+                suma=suma+1
+                        
+        cant_competencias = cant_competencias+ 1
+
+    if cant_competencias == 0:
+        return 0  # Evita la división por cero, retorna 0 o algún valor adecuado
+
+    cant_competencias = float(float(cant_competencias)*4)
+    valor_final=float(suma)/int(cant_competencias)
+    valor_final = float(valor_final*10)
+    
+    return (valor_final)
+        
+        
+def funcion_registrar_orden_merito(ruta_notas,idusuario,paca):
+	
+	#Desde aquí empieza el orde de mérito.			
+	df_notas= pd.read_excel(ruta_notas, engine='openpyxl')	
+	
+	col_selec=[1,2,38,12,16,20,23,27,30,34,37,41,43,60]#columnas a exluir de la limpieza x k contiene la fórmula
+	df_notas=df_notas.iloc[5:,[1,2,7,11,15,19,22,26,29,33,36,40,42]]
+	
+	
+	col_names=['dni','nombre','mat','com','ing','chi','art','ccs','dpcc','efis','erel','cyt','etrab']
+	# df_notas=df_notas.iloc[:,[1,2,12]]
+	df_notas.columns=col_names
+	
+	# # Define el orden de las columnas
+	
+	# Ordenar el DataFrame por 'puntaje', 'mat', 'com', 'cyt', 'ccs' de mayor a menor
+	orden_columnas = ['mat','com','ing','chi','art','ccs','dpcc','efis','erel','cyt','etrab']
+	df_notas = df_notas.sort_values(by=orden_columnas, ascending=False)
+	
+	# # Agregar una nueva columna 'orden de mérito' enumerando desde 1 hasta el ultimo registro
+	df_notas['Nota'] = [f"{numero}°" for numero in range(1, len(df_notas) + 1)]
+	
+	# Obtén una lista de DNIs del DataFrame
+	lista_dnies = df_notas['dni'].tolist()
+	# Realiza una consulta para obtener los IDs de los alumnos cuyos DNIs coinciden
+	alumnos = Matricula.objects.filter(Alumno__DNI__in=lista_dnies,AnoAcademico__Ano= datetime.now().year).values('id', 'Alumno__DNI')
+	# # Crea un diccionario que mapee DNIs a IDs de alumnos
+	dni_to_matricula_id = {alumno['Alumno__DNI']: alumno['id'] for alumno in alumnos}
+	
+	# Agrega una nueva columna 'Alumno_id' al DataFrame df_alumnos usando el diccionario
+	df_notas['Matricula_id'] = df_notas['dni'].map(dni_to_matricula_id)
+	
+	df_notas = df_notas.dropna()#elimina registraos NAN
+	df_notas['Matricula_id'] = df_notas['Matricula_id'].astype(int)
+
+	df_notas['Curso_id']=18
+	df_notas['Competencias_id']=88
+	df_notas['Docente_id']=idusuario
+	df_notas['PAcademico_id']=paca
+
+	df_nuevo=df_notas[['Matricula_id','Curso_id','Competencias_id','Docente_id','PAcademico_id','Nota']]
+	
+	#Verificar si existen registros antes de registrar
+	idmatricula=df_nuevo['Matricula_id'].iloc[0]
+	registros=list(NotasComp.objects.filter(Competencias_id=88,Curso_id=18,Matricula_id=idmatricula,PAcademico_id=paca).values('id'))
+	
+	if len(registros)>0:
+		return redirect('app_consolidado_libretas')
+	else:
+		# Convertir el DataFrame a un diccionario de registros
+		nuevos_registros = df_nuevo.to_dict(orient='records')
+		try:
+			pass
+            # Utilizar bulk_create() para insertar los registros en el modelo NotasComp
+			NotasComp.objects.bulk_create([NotasComp(**registro) for registro in nuevos_registros])
+		except Exception as e:
+			print(f"Error al guardar registros: {e}")
+		
+			

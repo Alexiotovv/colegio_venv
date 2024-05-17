@@ -865,6 +865,7 @@ def ImprimirConsolidadoLibretas(request):
 		if str(grado).find("PRIM")!= -1:
 			return redirect("http://colcoopcv.com/static/files/PLANTILLA_LIBRETA_PRIMARIA.xlsx")
 		else:
+			
 			return redirect("http://colcoopcv.com/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx")
 	else:
 		return render(request,'otras_opciones/imprimir_consolidado_libretas.html',contexto)
