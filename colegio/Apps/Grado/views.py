@@ -16,7 +16,7 @@ class GradoCreate(CreateView):
 	model=Grado
 	form_class=GradoForm
 	template_name='grado/create_update_grado.html'
-	success_url='/grado/create/'
+	success_url='/grado/list/'
 class GradoUpdate(UpdateView):
 	model=Grado
 	form_class=GradoForm

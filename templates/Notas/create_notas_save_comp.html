@@ -59,6 +59,7 @@
                                                 list="opciones">
                                                 <datalist id="opciones">
                                                     <option value="SIEMPRE">
+                                                    <option value="CASI SIEMPRE">
                                                     <option value="ALGUNAS VECES">
                                                     <option value="NUNCA">
                                                 </datalist>
@@ -86,6 +87,7 @@
                                                 
                                                     list="opciones">
                                                     <datalist id="opciones">
+                                                        <option value="SIEMPRE">
                                                         <option value="SIEMPRE">
                                                         <option value="ALGUNAS VECES">
                                                         <option value="NUNCA">
@@ -269,10 +271,10 @@
             if (tipo_curso=='DEL PADRE DE FAMILIA') {
                 var nota=document.getElementById(id_elemento).value.trim();
                 nota=nota.toUpperCase();
-                if (nota == 'NUNCA' || nota == 'ALGUNAS VECES' || nota == 'SIEMPRE'){
+                if (nota == 'NUNCA' || nota == 'ALGUNAS VECES' || nota == 'SIEMPRE' || nota =='CASI SIEMPRE' ){
                     document.getElementById(id_elemento).value=nota.toUpperCase();
                 }else{
-                    alert('Valores válidos: NUNCA, ALGUNAS VECES, SIEMPRE');
+                    alert('Valores válidos: NUNCA, ALGUNAS VECES, SIEMPRE, CASI SIEMPRE');
                     document.getElementById(id_elemento).value=''; 
                     document.getElementById(id_elemento).focus(); 
                 }

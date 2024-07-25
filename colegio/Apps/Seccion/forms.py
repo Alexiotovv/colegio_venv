@@ -6,8 +6,10 @@ class SeccionForm(forms.ModelForm):
 		model=Seccion
 		fields=[
 		'Nombre',
+		'AnoAcademico'
 		]
 		widgets={
 		'Nombre':forms.TextInput(attrs={'class':'form-control'}),
+		'AnoAcademico':forms.Select(attrs={'class':'form-select'}),
 		}
 		

@@ -1,4 +1,4 @@
-{% extends 'base/home.html' %}
+{% extends 'base/home_newtemplate.html' %}
 {% block title %}RegistrarNiveles{% endblock %}
 {% block active_ni %} active {% endblock %}
 
@@ -6,7 +6,8 @@
 <h3>Registro de Niveles</h3>
 <form method="POST">{% csrf_token %}
 	<label>Nombre del Nivel</label>
-	{{form.Nombre}}
+	{{form.as_p}}
+	
 	<br></br>
 		<button type="submit" class="btn btn-success" value="Guardar">Guardar Nivel</button>	
 </form>

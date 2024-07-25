@@ -1,4 +1,4 @@
-{% extends 'base/home.html' %}
+{% extends 'base/home_newtemplate.html' %}
 {% block title %}ListarNiveles{% endblock %}
 {% block active_ni %} active {% endblock %}
 
@@ -16,6 +16,7 @@
 			<thead>
 				<tr>
 					<th scope="col">Id</th>
+					<th scope="col">Año Académico</th>
 					<th scope="col">Nombre Nivel</th>
 					<th scope="col">Acciones</th>
 				</tr>
@@ -25,6 +26,7 @@
 		      {% for nivel in object_list %}
 		      	<tr class="default">
 		      		<td>{{nivel.id}}</td>
+					  <td>{{nivel.AnoAcademico}}</td>
 		      		<td>{{nivel.Nombre}}</td>
 		      		<td>
 		      			{% for group in user.groups.all %}

@@ -1,4 +1,4 @@
-{% extends 'base/home.html' %}
+{% extends 'base/home_newtemplate.html' %}
 {% block title %}Listar Secciones{%endblock%}
 {% block active_se %} active {% endblock%}
 {% block form %}
@@ -16,6 +16,7 @@
 		  <thead>
 		    <tr>
 		      <th scope="col">Id</th>
+			  <th scope="col">Año Académico</th>
 		      <th scope="col">Sección</th>
 		      <th scope="col">Acciones</th>
 		    </tr>
@@ -25,6 +26,7 @@
 		      {% for seccion in object_list %}
 			      <tr class= "class-default">
 			      	<td>{{ seccion.id }}</td>
+					  <td>{{ seccion.AnoAcademico }}</td>
 			      	<td>{{ seccion.Nombre }}</td>
 			      	<td>
 

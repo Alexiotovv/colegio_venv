@@ -11,7 +11,7 @@ class SeccionCreate(CreateView):
 	model = Seccion
 	form_class = SeccionForm
 	template_name = 'seccion/create_update_seccion.html'
-	success_url = '/seccion/create'
+	success_url = '/seccion/list/'
 
 class SeccionUpdate(UpdateView):
 	model=Seccion

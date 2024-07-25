@@ -1,4 +1,4 @@
-{% extends 'base/home.html' %}
+{% extends 'base/home_newtemplate.html' %}
 {% block title %}Listar Grados{%endblock%}
 {% block active_gr %} active {% endblock%}
 {% block form %}
@@ -16,7 +16,8 @@
 		  <thead>
 		    <tr>
 		      <th scope="col">Id</th>
-		      <th scope="col">Grado</th>		      
+			  <th scope="col">Año ACadémico</th>
+		      <th scope="col">Grado</th>      
 		      <th scope="col">Acciones</th>
 		    </tr>
 		  </thead>
@@ -25,6 +26,7 @@
 		      {% for grado in object_list %}
 			      <tr class= "class-default">
 			      	<td>{{ grado.id }}</td>
+					  <td>{{ grado.AnoAcademico }}</td>
 			      	<td>{{ grado.Nombre }}</td>
 			      	<td>
 					<a href="{% url 'app_grado_update' grado.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
