@@ -1,25 +1,37 @@
 {% extends 'base/home_newtemplate.html' %}
 {% block title %}AsignarCursos{% endblock title %}
 {% block form %}
+<div class="card">
+	<div class="card-body">
+
+
+
 <h5 align="CENTER">ASIGNACIÓN DE CURSOS/EVALUACIONES</h5>
 <form method="POST">{%csrf_token%}
 <h5>Dni: {{ doce.DNI }}/Nombres: {{doce.User.first_name}} {{doce.User.last_name}} </h5>
 	
 	<div class="row">
-	<div class="col-md-6 col-lg-6 col-xs-6">
-		<label>Seleccione Evaluación</label>
-		<!-- {{form.Curso}} -->
-		<select name="Curso" id="Curso" class="form-select">
-			{% for cur in lista_cursos %}
-				<option value="{{cur.id}}">{{cur.Nivel}} - {{cur.CodCurso}} - {{cur.Nombre}}</option>
-			{% endfor %}
-
-		</select>
-	</div>
-	<div class="col-md-6 col-lg-6 col-xs-6">
-		<br>
-		<button type="submit" class="btn btn-success" value="Guardar">Guardar Asignación</button>		
-	</div>
+		<div class="col-md-6">
+			<label>Seleccione Evaluación</label>
+			<select name="Curso" id="Curso" class="form-select">
+				{% for cur in lista_cursos %}
+					<option value="{{cur.id}}">{{cur.Nivel}} - {{cur.CodCurso}} - {{cur.Nombre}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="col-md-6">
+			<label>Seleccione Aula</label>
+			<select name="aula" id="aula" class="form-select">
+				{% for aula in aulas %}
+				  	<option value="{{aula.id}}">{{aula}}</option>
+				{% endfor %}
+			</select>
+		</div>
+		
+		<div class="col-md-6">
+			<br>
+			<button type="submit" class="btn btn-success" value="Guardar">Guardar Asignación</button>		
+		</div>
 	</div>
 </form>
 
@@ -30,6 +42,7 @@
 		      <th scope="col">Id</th>
 		      <th scope="col">CursoAsignado</th>
 			  <th scope="col">Nivel del Curso</th>
+			  <th scope="col">Aula</th>
 		      <th scope="col">Acciones</th>
 		    </tr>
 		  </thead>
@@ -40,6 +53,7 @@
 			      	<td>{{ docentes.id }}</td>
 			      	<td>{{ docentes.Curso }}</td>
 					<td>{{ docentes.Curso.Nivel}}</td>
+					<td>{{ docentes.Aulas}}</td>
 			      	<td>
 						<a href="{% url 'app_docentecurso_update' docentes.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
 						<a href="{% url 'app_docentecurso_delete' docentes.id %}" class="btn btn-danger"><span class="trash-solid icon"></span>__</a>
@@ -49,5 +63,7 @@
 		    
 		  </tbody>
 		</table>
+	</div>
+</div>
 {% endblock %}
 

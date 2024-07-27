@@ -13,8 +13,8 @@ class Curso (models.Model):
     Nivel= models.CharField(max_length=60,choices=NIVEL, default='PRIM')
     
     def NombreCurso(self):
-        cadena = "{0}-{1}-{2}"
-        return cadena.format(self.Nivel,self.CodCurso,self.Nombre)
+        cadena = "{0}-{1}"
+        return cadena.format(self.Nivel,self.Nombre)
         
     def __str__(self):
         return self.NombreCurso()

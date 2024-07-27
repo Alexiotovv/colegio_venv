@@ -18,6 +18,7 @@
 		      <th scope="col">Año Académico</th>
 		      <th scope="col">Fecha Inicio</th>
 		      <th scope="col">Fecha Final</th>
+			  <th scope="col">Activo</th>
 		      <th scope="col">Acciones</th>
 		    </tr>
 		  </thead>
@@ -28,9 +29,17 @@
 			      	<td>{{ academico.Ano }}</td>
 			      	<td>{{ academico.FechaInicio }}</td>
 			      	<td>{{ academico.FechaFinal }}</td>
+					  	<td>
+							{% if academico.Activo %}
+								<p>Sí</p> 
+							{% else %}
+								<p>No</p> 
+							{% endif %}
+							
+						</td>
 			      	<td>
 			      	<a href="{% url 'app_academico_detalle' academico.id %}" class="btn btn-success"><span class="eye-solid icon"></span>__</a>	
-					<a href="{% url 'app_academico_editar' academico.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
+					<a href="{% url 'app_academico_edit' academico.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
 					<a href="{% url 'app_academico_delete' academico.id %}" class="btn btn-danger"><span class="trash-solid icon"></span>__</a>
 			      	</td>
 			      </tr>	

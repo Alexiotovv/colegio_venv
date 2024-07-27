@@ -1,13 +1,27 @@
+from sqlite3 import Cursor
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import ListView, UpdateView, DeleteView, DetailView
 from colegio.Apps.Docente.forms import DocenteForm
 from colegio.Apps.Docente.models import Docente
+from colegio.Apps.Curso.models import Curso
+from colegio.Apps.Aulas.models import Aulas
 from django.contrib.auth.models import User
 
-class DocenteList (ListView):
-	model = Docente
-	template_name = 'docente/listar_docentes.html'
+
+def DocenteList (request):
+	message = request.GET.get('message', None)
+	status = request.GET.get('status', None)
+
+	docentes = Docente.objects.prefetch_related('docente_id').all()	
+	lista_cursos = Curso.objects.all()
+	lista_aulas = Aulas.objects.filter(AnoAcademico__Activo=True)
+	return render(request,'docente/listar_docentes.html',{
+		'docentes':docentes,
+		'lista_cursos':lista_cursos,
+		'lista_aulas':lista_aulas,
+		'message':message,
+		'status':status})
 
 def DocenteNew (request,id_user):
 	if request.method == 'POST':

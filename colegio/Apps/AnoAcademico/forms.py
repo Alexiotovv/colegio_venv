@@ -7,10 +7,12 @@ class AnoAcademicoForm (forms.ModelForm):
 		fields = [
 		'Ano',
 		'FechaInicio',
-		'FechaFinal'
+		'FechaFinal',
+		'Activo'
 		]
 		widgets = {
 		'Ano':forms.TextInput(attrs={'class':'form-control'}),
 		'FechaInicio':forms.DateInput(attrs={'class':'form-control','type':'Date'}),
 		'FechaFinal':forms.DateInput(attrs={'class':'form-control','type':'Date'}),
+		'Activo':forms.TextInput(attrs={'class':'form-control','type':'checkbox'}),
 		}

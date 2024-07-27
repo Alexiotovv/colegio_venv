@@ -1,0 +1,29 @@
+{% extends 'base/home_newtemplate.html' %}
+{% block title %}Actualizar Año Academico{% endblock %}
+{%block active_ac%}active{%endblock%}
+{% block form %}
+<div class="col-md-10">
+	<form action="{% url 'app_academico_update' %}" id="formularioAlumno" method="POST">
+		{% csrf_token %}
+		<h5>Registro de Año Académico</h5>
+		<input type="text" name="idanoacademico" value="{{ano.id}}" hidden>
+
+		<label for="Ano">Año Académico</label>
+		<input type="text" name="nombre" class="form-control" value="{{ano.Ano}}" maxlength="4">
+
+		<label for="Ano">Fecha Inicial</label>
+		<input type="date" name="fechainicio" class="form-control" value="{{fecha_inicio}}">
+
+		<label for="Ano">Fecha Final</label>
+		<input type="date" name="fechafinal" class="form-control" value="{{fecha_final}}">
+
+		<label for="Ano">Activo</label>
+		<br>
+		<input type="checkbox" name="activo" class="form-check" {% if ano.Activo %} checked {% endif %}>
+		<br>
+		<br>
+	    	<button type="submit" class="btn btn-success" value="Guardar">Guardar Año</button>
+	</form>
+</div>
+
+{% endblock %}

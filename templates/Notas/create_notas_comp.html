@@ -7,6 +7,28 @@
 <form method="POST" id="form_selecciona">{%csrf_token%}
 	<!-- onsubmit="return valida(); iba en la parte de arriba-->
 	<div class="row">
+		<div class="col-md-6">
+			<label for="asignacion">Seleccione Curso | Aulasa</label>
+			{% for ids_guardadps_list in ids_guardadps_list %}
+				  <h5>asd{{ids_guardadps_list}}</h5>
+			{% endfor %}
+			<select name="docentecurso" id="docentecurso" class="single-select">
+				{% for asignacion in asignaciones %}
+					{% for ids_guardadps_list in ids_guardadps_list %}
+						<h5></h5>	
+						<option value="{{asignacion.id}}" >{{ids_guardadps_list}}</option>
+					{% if asignacion.id == ids_guardadps_list%}
+						{% else %}
+							<option value="{{asignacion.id}}">{{asignacion}}</option>
+						{% endif %}
+					
+					{% endfor %}
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	{% comment %} <div class="row">
 		<div class="col-md-4">
 			<label>Seleccione Curso</label>
 			<select class="single-select" name="curso" id="curso">
@@ -16,7 +38,7 @@
 			</select>
 			
 		</div>	
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<label>Seleccione GradoNivel</label>
 			<select class="single-select" name="grados" id="grados">
 				{% for grados in grados_list %}
@@ -24,7 +46,7 @@
 				{% endfor %}
 			</select>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<label>Seleccione Sección</label>
 			<select class="single-select" name="secciones" id="secciones">
 				{% for secciones in secciones_list %}
@@ -32,7 +54,7 @@
 				{% endfor %}
 			</select>
 		</div>
-	</div>
+	</div> {% endcomment %}
 	<br>
 	<div class="row">
 			<div class="col-md-4">

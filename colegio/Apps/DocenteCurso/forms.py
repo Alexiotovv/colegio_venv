@@ -6,10 +6,12 @@ class DocenteCursoForm(forms.ModelForm):
 		model = DocenteCurso
 		fields = [
 		'Docente',
-		'Curso'
+		'Curso',
+		'Aulas'
 		]
 		widgets = {
 		'Docente':forms.Select(attrs = {'class':'single-select'}),
 		'Curso':forms.Select(attrs={'class':'single-select'}),
+		'Aulas':forms.Select(attrs={'class':'single-select'}),
 		}
 		

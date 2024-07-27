@@ -3,6 +3,8 @@ from colegio.Apps.AnoAcademico.models import *
 from colegio.Apps.Aulas.models import * 
 from colegio.Apps.Nivel.models import * 
 from colegio.Apps.Grado.models import * 
+from colegio.Apps.DocenteCurso.models import * 
+
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 from django.urls import reverse
@@ -76,6 +78,20 @@ def update(request):
         aula.save()
         
         return redirect('/index/aulas/?message=Registro actualizado satisfactoriamente')
+
+def destroy(request):
+    if request.method=='POST':
+        id_aula=request.POST.get('id_registro_eliminar')
+        
+        print(id_aula)
+
+        existen_registros=DocenteCurso.objects.filter(Aulas_id=id_aula).exists()
+        if existen_registros:
+            return redirect('/index/aulas/?message=No se puede Eliminar este aula, contiene datos')
+        else:
+            Aulas.objects.get(id=id_aula).delete()
+
+        return redirect('/index/aulas/?message=Aula eliminada correctamente')
 
 def edit(request,id_aula):
     aula = Aulas.objects.get(id=id_aula)

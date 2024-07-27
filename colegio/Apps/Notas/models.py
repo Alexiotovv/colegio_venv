@@ -6,6 +6,7 @@ from colegio.Apps.AnoAcademico.models import AnoAcademico
 from colegio.Apps.Docente.models import Docente
 from colegio.Apps.PeriodoAcademico.models import PAcademico
 from colegio.Apps.Matricula.models import Matricula
+from colegio.Apps.DocenteCurso.models import *
 
 class Notas(models.Model):
 	Curso = models.ForeignKey(Curso,null=False,blank=False,on_delete=models.CASCADE)
@@ -20,6 +21,7 @@ class NotasComp(models.Model):
 	Matricula = models.ForeignKey(Matricula,null=False,blank=False,on_delete=models.CASCADE)
 	PAcademico = models.ForeignKey(PAcademico,null=False,blank=False,on_delete=models.CASCADE)
 	Docente = models.ForeignKey(Docente,null=False,blank=False,on_delete=models.CASCADE)#user name
+	DocenteCurso = models.ForeignKey(DocenteCurso,null=True,blank=True,on_delete=models.CASCADE)
 	Nota = models.CharField(max_length=250,default='-')	
 
 class SettingNotas(models.Model):

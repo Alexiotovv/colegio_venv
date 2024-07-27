@@ -289,25 +289,36 @@ def NotasNuevoComp(request):
 	curso_list = DocenteCurso.objects.filter(Docente__User__id=request.user.id)#para refencia en GradoNivel plantilla Seccion
 	
 	docente = Docente.objects.get(User__id=request.user.id)
-	grados_list = str(docente.GradoNivel).split()#Extrae los grados de la cadena y los pone en lista
-	secciones_list = str(docente.Seccion).split()#Extrae las secciones de la cadena y los pone en lista
+	# grados_list = str(docente.GradoNivel).split()#Extrae los grados de la cadena y los pone en lista
+	# secciones_list = str(docente.Seccion).split()#Extrae las secciones de la cadena y los pone en lista
 	######################
-	#este contexto es para el ELSE
-	contexto2 = {'doce':doce,'paca':paca,'ano':ano,'curso_list':curso_list,'grados_list':grados_list,'secciones_list':secciones_list} #'doce':doce}#'matri':matri
-	if request.method=='POST':
-		temp_datos = TempDatos()
-		
-		usu=User()
-		usu.id=request.user.id
-		doce.User=usu
-		
-		temp_datos.User = usu#nuevo
-		temp_datos.idCurso = request.POST.get("curso")
-		temp_datos.grado = request.POST.get("grados")
-		temp_datos.seccion = request.POST.get("secciones")
-		temp_datos.save()
 
-		return redirect('app_nota_nuevo_save_comp')#aqui guarda los avances de notas secundaria
+	asignaciones = DocenteCurso.objects.filter(Docente_id=docente.id)
+	asignaciones_ids = asignaciones.values_list('id', flat=True)
+	ids_guardados = NotasComp.objects.filter(DocenteCurso_id__in=asignaciones_ids).values_list('DocenteCurso_id', flat=True).distinct()
+	
+	ids_guardados_list = ids_guardados
+	print(ids_guardados_list)
+	#este contexto es para el ELSE
+	contexto2 = {'asignaciones':asignaciones,'doce':doce,'paca':paca,'ano':ano,'curso_list':curso_list,'ids_guardados_list':ids_guardados_list}#,'grados_list':grados_list,'secciones_list':secciones_list
+	if request.method=='POST':
+		asignacion= DocenteCurso.objects.get(id=request.POST.get('docentecurso'))
+		nivel = asignacion.Aulas.Nivel.Nombre[:3]
+		if nivel == 'PRI':
+			nivel='PRIM'
+		else:
+			nivel == 'SEC'
+
+
+		temp_datos = TempDatos()
+		temp_datos.User_id = request.user.id#nuevo
+		# temp_datos.idCurso = request.POST.get("curso")
+		temp_datos.idCurso = asignacion.Curso_id
+		temp_datos.grado = f"{asignacion.Aulas.Grado.Nombre}{nivel}"
+		temp_datos.seccion = asignacion.Aulas.Seccion.Nombre
+		temp_datos.DocenteCurso_id = asignacion.id
+		temp_datos.save()
+		return redirect('app_nota_nuevo_save_comp')
 	else:
 		return render(request,'Notas/create_notas_comp.html',contexto2)
 
@@ -316,23 +327,22 @@ def NotasNuevoSaveComp(request):
 	paca = PAcademico.objects.get(Status='Activo')#Bimestre
 	doce = Docente.objects.get(User__id=request.user.id)#Profesor
 	
-	usu=User()
-	usu.id=request.user.id
-	doce.User=usu
+	td_comp=TempDatos.objects.get(User_id=request.user.id)
 
-	#td = AvanceTempDatos.objects.get(User=usu) #funcionaba
-	td_comp=TempDatos.objects.get(User=usu)
+	curso = Curso.objects.get(id=td_comp.idCurso)#Sacar de la tabla DocenteCurso
+	grado =  td_comp.grado#Sacar de la tabla DocenteCurso
+	seccion = td_comp.seccion#Scar de la tabla DocenteCurso
 
-	#compe = Competencias.objects.get(id=td_comp.idCurso)
-	curso = Curso.objects.get(id=td_comp.idCurso)
+	notas = NotasComp.objects.filter(Curso=td_comp.idCurso, 
+								  Matricula__Seccion=td_comp.seccion, 
+								  Matricula__Grado=td_comp.grado, 
+								  Matricula__AnoAcademico=ano.id,
+								  PAcademico__id=paca.id)
 
-	grado =  td_comp.grado
-	seccion = td_comp.seccion	
-	notas = NotasComp.objects.filter(Curso=td_comp.idCurso, Matricula__Seccion=td_comp.seccion, Matricula__Grado=td_comp.grado, 
-	Matricula__AnoAcademico=ano.id, PAcademico__id=paca.id)
-	#notas = AvanceNotas.objects.filter(Curso__id=td.idCurso, Matricula__Seccion=td.seccion, Matricula__Grado=td.grado, Matricula__AnoAcademico=ano.id, PAcademico__id=paca.id)
 	#Encontrando las competencias del Curso
-	lista_compe=CompetenciaCurso.objects.filter(Curso__id=curso.id,Competencias__status=True).order_by('Competencias__Orden')
+	lista_compe=CompetenciaCurso.objects.filter(
+											Curso__id=curso.id,
+											Competencias__status=True).order_by('Competencias__Orden')
 	######################################################################
 	nivel=str(grado)[1:len(grado)]
 	num_compe=0
@@ -342,7 +352,14 @@ def NotasNuevoSaveComp(request):
 	if notas:
 		alumnos = ''		
 	else:
-		alumnos = Matricula.objects.filter(Grado=td_comp.grado,Seccion=td_comp.seccion,AnoAcademico=ano.id,Alumno__Estado='A').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
+		alumnos = Matricula.objects.filter(
+									Grado=td_comp.grado,
+									Seccion=td_comp.seccion,
+									AnoAcademico=ano.id,
+									Alumno__Estado='A').order_by(
+															'Alumno__ApellidoPaterno',
+															'Alumno__ApellidoMaterno',
+															'Alumno__Nombres')
 	
 	contexto={'grado':grado,'seccion':seccion,'curso':curso,'ano':ano,'paca':paca,'doce':doce,'alumnos':alumnos,'lista_compe':lista_compe,'num_compe':num_compe,'nivel':nivel}
 	
@@ -350,27 +367,12 @@ def NotasNuevoSaveComp(request):
 		for alu in alumnos:
 			for cc in lista_compe:
 				notacomp = NotasComp()
-
-				cur = Curso()
-				cur.id = td_comp.idCurso
-				notacomp.Curso = cur
-
-				comp = Competencias()
-				comp.id = cc.Competencias.id
-				notacomp.Competencias = comp
-
-				pac = PAcademico()
-				pac.id = paca.id
-				notacomp.PAcademico = pac
-
-				doc = Docente()
-				doc.id = doce.id
-				notacomp.Docente = doc
-		
-				mat = Matricula()
-				mat.id = alu.id
-				notacomp.Matricula = mat
-
+				notacomp.Curso_id = td_comp.idCurso
+				notacomp.Competencias_id = cc.Competencias.id
+				notacomp.PAcademico_id = paca.id
+				notacomp.Docente_id = doce.id
+				notacomp.Matricula_id = alu.id
+				notacomp.DocenteCurso_id = td_comp.DocenteCurso_id
 				#es alu.id porque el inputtextNota lleva el nombre del id de matricula
 				evalu=alu.id #obtener el id del alumno
 				evcomp=cc.Competencias.id##obtener el id de la competencia para combinarlo
@@ -384,7 +386,16 @@ def NotasNuevoSaveComp(request):
 				notacomp.save()
 		grabo='registrado'
 		
-		notita = NotasComp.objects.filter(Docente__User__id=request.user.id, Curso__id=td_comp.idCurso, Matricula__Grado=td_comp.grado, Matricula__Seccion=td_comp.seccion,Matricula__AnoAcademico=ano.id,PAcademico__id=paca.id).order_by('Matricula__Alumno__ApellidoPaterno','Matricula__Alumno__ApellidoMaterno','Matricula__Alumno__Nombres')
+		notita = NotasComp.objects.filter(
+										Docente__User__id=request.user.id, 
+										Curso__id=td_comp.idCurso, 
+										Matricula__Grado=td_comp.grado, 
+										Matricula__Seccion=td_comp.seccion,
+										Matricula__AnoAcademico=ano.id,
+										PAcademico__id=paca.id).order_by(
+																	'Matricula__Alumno__ApellidoPaterno',
+																	'Matricula__Alumno__ApellidoMaterno',
+																	'Matricula__Alumno__Nombres')
 		context = {'grabo':grabo,'curso':curso,'grado':grado,'seccion':seccion,'notita':notita}
 
 		persona=TempDatos.objects.filter(User=request.user.id)

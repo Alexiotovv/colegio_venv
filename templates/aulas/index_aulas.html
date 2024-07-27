@@ -44,6 +44,7 @@
                                 <td>{{ aulas.id }}</td>
                                 <td>
                                     <button class="btn btn-light btn-sm" onclick="fnEditarAula('{{aulas.id}}')">Editar</button>
+                                    <button class="btn btn-lith btn-sm" onclick="fnEliminarAula('{{aulas.id}}')" >Eliminar</button>
                                 </td>
                                 <td>{{ aulas.AnoAcademico }}</td>
                                 <td>{{ aulas.Nivel }}</td>
@@ -174,6 +175,9 @@
     
 </div>
 
+{% include "messages/confirmacion_delete.html" %}
+
+
 {% endblock form %}
 
 {% block js1 %}
@@ -181,6 +185,12 @@
 
     function modalNuevoAula() { 
         $("#modalNuevoAula").modal("show");
+    };
+
+    function fnEliminarAula(id_aula) { 
+        $('#formEliminar').attr('action', "{% url 'app_destroy_aulas' %}");
+        $("#id_registro_eliminar").val(id_aula);
+        $("#modalConfirmacionEliminar").modal('show');
     };
 
     function fnEditarAula(id_aula) { 
@@ -200,8 +210,6 @@
             }
         });
         
-
-
     };
 
   </script>

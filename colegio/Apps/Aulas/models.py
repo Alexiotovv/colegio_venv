@@ -9,3 +9,6 @@ class Aulas(models.Model):
     Nivel = models.ForeignKey(Nivel,null=False,blank=False, verbose_name=("Nivel Académico"), on_delete=models.CASCADE)
     Grado = models.ForeignKey(Grado,null=False,blank=False, verbose_name=("Grado Académico"), on_delete=models.CASCADE)
     Seccion = models.ForeignKey(Seccion, null=False,blank=False, verbose_name=("Sección Académico"), on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.AnoAcademico} | Nivel: {self.Nivel} | Grado: {self.Grado} | Sección: {self.Seccion}"

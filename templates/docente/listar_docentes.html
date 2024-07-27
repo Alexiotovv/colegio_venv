@@ -1,59 +1,212 @@
 {% extends 'base/home_newtemplate.html' %}
 {% block title %} Listar Docentes{% endblock %}
 {% block form %}
-<div class="row">
-<div class="col-md-12 col-lg-12 col-xs-12 col-xl-12">
-	<br></br>
-	<a href="{% url 'app_usuario_listar' %}"><button type="submit" class="btn btn-info">Nuevo Docente</button></a>
+<div class="card">
+	<div class="card-body">
+		{% if message %}
+            <div class="alert border-0 border-start border-5 border-{{status}} alert-dismissible fade show py-2">
+                <div class="d-flex align-items-center">
+                    <div class="font-35 text-{{status}}"><i class='bx bxs-check-circle'></i>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0 text-{{status}}">Mensaje</h6>
+                        <div>{{message}}</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
-			<div class="text" text align="center">
-				<h3>Lista de todos los Docentes</h3>
+        {% endif %}
+
+		<div class="row">
+			<div class="col-md-12 col-lg-12 col-xs-12 col-xl-12">
+				<br></br>
+				<a href="{% url 'app_usuario_listar' %}"><button type="submit" class="btn btn-info">Nuevo Docente</button></a>
+
+						<div class="text" text align="center">
+							<h3>Lista de todos los Docentes</h3>
+						</div>
+					<div class="table-responsive">
+					<table class="table table-hover" id="example2" class="table table-striped table-bordered">
+					<thead>
+						<tr>
+						<th scope="col">Id</th>
+						<th scope="col">DNI</th>
+						<th scope="col">Nombre Completo</th>
+						<th scope="col">GradoNivel</th>
+						<th scope="col">Tutor</th>
+						<th scope="col">Seccion</th>
+						<th scope="col">Aulas/Cursos</th>
+						<th scope="col">Acciones</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{% for docentes in docentes %}
+							<!--<tr class= "class-default" onclick="window.location='{% url 'app_docente_detalle' docentes.id %}';">  -->
+								<td>{{ docentes.User.id }}</td>
+								<td>{{ docentes.DNI }}</td>
+								<td>{{ docentes.User.last_name }}, {{ docentes.User.first_name }}</td>
+								<td>{{ docentes.GradoNivel }}</td>
+								<td>{{ docentes.TutorGrado }}-{{ docentes.TutorSeccion }}</td>
+								<td>{{ docentes.Seccion }}</td>
+								<td>
+									<a onclick="modalAsignarCursoAula('{{docentes.id}}')" class="btn btn-outline-success btn-sm"><i class="bx bx-list-plus"></i></a>
+									<br>
+
+									{% for docente in docentes.docente_id.all %}
+										{% ifchanged docente.Aulas %}
+										<hr>
+										<p><strong>Aula: {{docente.Aulas}}</p></strong>
+											<p style="padding-left: 12px;">Cursos: </p>
+										{% endifchanged %}
+											<p style="padding-left: 12px;">
+												{{ forloop.counter }}. {{docente.Curso}}
+												<a onclick="btnEliminarAulaCurso('{{docente.id}}')" class="btn btn-lihgt btn-sm" data-bs-toggle="tooltip" title="Eliminar Curso"> <i class="lni lni-cross-circle"></i></a>
+												<a onclick="btnEditarAulaCurso('{{docente.id}}')" class="btn btn-light btn-sm"> <i class="lni lni-pencil" data-bs-toggle="tooltip" title="Editar Aula"></i></a>
+											</p>
+
+
+									{% endfor %}
+
+								</td>
+
+								<td>
+
+								<a href="{% url 'app_docente_detalle' docentes.id %}" class="btn btn-primary btn-small"><span class="eye-solid icon"></span>__</a>
+
+								<a href="{% url 'app_docente_editar' docentes.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
+
+								<a href="{% url 'app_docente_delete' docentes.id %}" class="btn btn-danger"><span class="trash-solid icon"></span>__</a>
+
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+					</table>
+					</div>
 			</div>
-		<div class="table-responsive">
-		<table class="table table-hover" id="example2" class="table table-striped table-bordered">
-		  <thead>
-		    <tr>
-		      <th scope="col">Id</th>
-		      <th scope="col">DNI</th>
-		      <th scope="col">Nombres</th>
-		      <th scope="col">Apellidos</th>
-		      <th scope="col">GradoNivel</th>
-			  <th scope="col">Tutor</th>
-		      <th scope="col">Seccion</th>
-		      <th scope="col">Cursos</th>
-		      <th scope="col">Acciones</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		  	{% if object_list %}
-		      {% for docentes in object_list %}
-			      <!--<tr class= "class-default" onclick="window.location='{% url 'app_docente_detalle' docentes.id %}';">  -->
-			      	<td>{{ docentes.User.id }}</td>
-			      	<td>{{ docentes.DNI }}</td>
-			      	<td>{{ docentes.User.first_name }}</td>
-			      	<td>{{ docentes.User.last_name }}</td>
-			      	<td>{{ docentes.GradoNivel }}</td>
-					<td>{{ docentes.TutorGrado }}-{{ docentes.TutorSeccion }}</td>
-					<td>{{ docentes.Seccion }}</td>
-			      	<td>
-			      		<a href="{% url 'app_docentecurso_create' docentes.id %}" class="btn btn-outline-success"><span class=""></span>Asignar Cursos</a>
-			      	</td>
-
-			      	<td>
-
-					<a href="{% url 'app_docente_detalle' docentes.id %}" class="btn btn-primary btn-small"><span class="eye-solid icon"></span>__</a>
-
-					<a href="{% url 'app_docente_editar' docentes.id %}" class="btn btn-warning"><span class="edit-solid icon"></span>__</a>
-					
-					<a href="{% url 'app_docente_delete' docentes.id %}" class="btn btn-danger"><span class="trash-solid icon"></span>__</a>				
-
-			      	</td>
-			      </tr>	
-		      {% endfor %}
-		     {% endif %}
-		  </tbody>
-		</table>
 		</div>
+	</div>
 </div>
+
+
+<div class="modal fade" id="modalAsignarCursoAula" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar Curso/Aula</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="formAgregarCursoAula" action="{% url 'app_docentecurso_store' %}"> {% csrf_token %}
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" name="docente_id" id="docente_id" hidden readonly>
+							<label>Seleccione Curso</label>
+							<select name="curso" id="curso" class="single-select" >
+									<option value="">----</option>
+								{% for cur in lista_cursos %}
+									<option value="{{cur.id}}">{{cur.Nivel}} - {{cur.Nombre}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label>Seleccione Aula</label>
+							<select name="aula" id="aula" class="single-select">
+								<option value="">----</option>
+								{% for aula in lista_aulas %}
+									  <option value="{{aula.id}}">{{aula}}</option>
+								{% endfor %}
+							</select>
+						</div>
+
+						<div class="col-md-6">
+							<br>
+							<button type="submit" class="btn btn-success btn-sm"  value="Guardar">Guardar Asignación</button>
+						</div>
+					</div>
+            	</form>
+        	</div>
+    	</div>
+	</div>
 </div>
+
+<div class="modal fade" id="modalEditarCursoAula" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Aula</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="formEditarCursoAula" action="{% url 'app_docentecurso_update' %}"> {% csrf_token %}
+					<div class="row">
+						<div class="col-md-6">
+							<input type="text" name="docentecurso_id" id="docentecurso_id" hidden readonly>
+							<label>Seleccione Curso</label>
+							<select name="curso" id="curso_edit" class="single-select">
+								{% for cur in lista_cursos %}
+									<option value="{{cur.id}}">{{cur.Nivel}} - {{cur.Nombre}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-md-6">
+							<label>Seleccione Aula</label>
+							<select name="aula" id="aula_edit" class="single-select">
+								<option value="">----</option>
+								{% for aula in lista_aulas %}
+									  <option value="{{aula.id}}">{{aula}}</option>
+								{% endfor %}
+							</select>
+						</div>
+
+						<div class="col-md-6">
+							<br>
+							<button type="submit" class="btn btn-success btn-sm"  value="Guardar">Guardar Asignación</button>
+						</div>
+					</div>
+            	</form>
+        	</div>
+    	</div>
+	</div>
+</div>
+
+
+{% include "messages/confirmacion_delete.html" %}
+
 {% endblock form %}
+
+{% block js1 %}
+	<script>
+		function modalAsignarCursoAula(id_docente) {
+			$("#docente_id").val(id_docente);
+			$("#modalAsignarCursoAula").modal('show');
+		};
+
+		function btnEliminarAulaCurso(id_docentecurso) {
+			$('#formEliminar').attr('action', "{% url 'app_docentecurso_destroy' %}");
+			$("#id_registro_eliminar").val(id_docentecurso);
+			$("#modalConfirmacionEliminar").modal('show');
+
+		}
+
+		function btnEditarAulaCurso(id_docentecurso){
+			$.ajax({
+				type: "GET",
+				url: "/docentecurso/edit/"+id_docentecurso,
+				dataType: "json",
+				success: function (data) {
+					$("#docentecurso_id").val(id_docentecurso)
+					$("#curso_edit").val(data.Curso).change();
+					$("#aula_edit").val(data.Aulas).change();
+					$("#modalEditarCursoAula").modal('show');
+				}
+			});
+
+		}
+
+	</script>
+
+
+{% endblock js1 %}
