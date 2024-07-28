@@ -162,6 +162,7 @@
                                                 <!-- COMPETENCIA COMPETENCIA COMPETENCIA COMPETENCIA -->
 
                                                 <!-- NOTAS NOTAS NOTAS NOTAS -->
+
                                                 <!-- AQUI PRIMER BIMESTRE -->
                                                     <td style="padding-bottom: 0px;
                                                             -webkit-print-color-adjust: exact;
@@ -177,7 +178,7 @@
                                                             {% endifequal %}
                                                             {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                             ">
-                                                            {% if no.nota >= '0' %}
+                                                            {% comment %} {% if no.nota >= '0' %}
                                                                 {% if  no.nota == '1' or no.nota == '2' or no.nota == '3' or no.nota == '4' or no.nota == '5' or  no.nota == '6' or no.nota == '7' or no.nota == '8' or no.nota == '9' or no.nota == '10' or no.nota == '01' or no.nota == '02' or no.nota == '03' or no.nota == '04' or no.nota == '05' or  no.nota == '06' or no.nota == '07' or no.nota == '08' or no.nota == '09' or no.nota == '10'%}
                                                                     C
                                                                 {% else %}
@@ -189,13 +190,13 @@
                                                                         {% else %}
                                                                             {% if no.nota <= '20' %}
                                                                                 AD
-                                                                            {% else %}
+                                                                            {% else %} {% endcomment %}
                                                                                 {{no.nota}}
-                                                                            {%endif%}
+                                                                            {% comment %} {%endif%}
                                                                         {% endif %}
                                                                     {% endif %}
                                                                 {% endif %}
-                                                            {% endif %}
+                                                            {% endif %} {% endcomment %}
                                                         {% comment %} {% endif %} {% endcomment %}
                                                     </td>
 
@@ -212,7 +213,7 @@
                                                         {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                         {% ifequal no.nota2 'C' %} color: black; font-weight: bold; {% endifequal %}">
 
-                                                            {% if no.nota2 >= '0' %}
+                                                            {% comment %} {% if no.nota2 >= '0' %}
                                                                 {% if  no.nota2 == '1' or no.nota2 == '2' or no.nota2 == '3' or no.nota2 == '4' or no.nota2 == '5' or  no.nota2 == '6' or no.nota2 == '7' or no.nota2 == '8' or no.nota2 == '9' or no.nota2 == '10' or no.nota2 == '01' or no.nota2 == '02' or no.nota2 == '03' or no.nota2 == '04' or no.nota2 == '05' or  no.nota2 == '06' or no.nota2 == '07' or no.nota2 == '08' or no.nota2 == '09' or no.nota2 == '10'%}
                                                                 C
                                                             {% else %}
@@ -224,13 +225,13 @@
                                                                     {% else %}
                                                                         {% if no.nota2 <= '20' %}
                                                                             AD
-                                                                        {% else %}
-                                                                            {{no.Nota2}}
-                                                                        {%endif%}
+                                                                        {% else %} {% endcomment %}
+                                                                            {{no.nota2}}
+                                                                        {% comment %} {%endif%}
                                                                     {% endif %}
                                                                 {% endif %}
                                                             {% endif %}
-                                                        {% endif %}
+                                                        {% endif %} {% endcomment %}
                                                     {% comment %} {% endif %} {% endcomment %}
                                                 </td>
                                                 <!--AQUI TERCER BIMESTRE -->
@@ -245,7 +246,7 @@
                                                     {% endif %}
                                                     {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                     {% ifequal no.nota3 'C' %} color: black; font-weight: bold; {% endifequal %}">
-                                                            {% if no.nota3 >= '0' %}
+                                                            {% comment %} {% if no.nota3 >= '0' %}
                                                                 {% if  no.nota3 == '1' or no.nota3 == '2' or no.nota3 == '3' or no.nota3 == '4' or no.nota3 == '5' or  no.nota3 == '6' or no.nota3 == '7' or no.nota3 == '8' or no.nota3 == '9' or no.nota3 == '10' or no.nota3 == '01' or no.nota3 == '02' or no.nota3 == '03' or no.nota3 == '04' or no.nota3 == '05' or  no.nota3 == '06' or no.nota3 == '07' or no.nota3 == '08' or no.nota3 == '09' or no.nota3 == '10'%}
                                                                 C
                                                             {% else %}
@@ -257,13 +258,13 @@
                                                                     {% else %}
                                                                         {% if no.nota3 <= '20' %}
                                                                             AD
-                                                                        {% else %}
+                                                                        {% else %} {% endcomment %}
                                                                             {{no.nota3}}
-                                                                        {%endif%}
+                                                                        {% comment %} {%endif%}
                                                                     {% endif %}
                                                                 {% endif %}
                                                             {% endif %}
-                                                        {% endif %}
+                                                        {% endif %} {% endcomment %}
                                                     {% comment %} {% endif %} {% endcomment %}
                                                 </td>
                                                 <!--AQUI CUARTO BIMESTRE -->
@@ -279,7 +280,7 @@
                                                         {%ifequal no.nombrecompetencia 'CALIFICATIVO DE ÁREA'%}background-color: rgb(226, 225, 225);{%endifequal%}
                                                         {% ifequal no.nota4 'C' %} color: black; font-weight: bold; {% endifequal %}">
                                                         
-                                                            {% if no.nota4 >= '0' %}
+                                                            {% comment %} {% if no.nota4 >= '0' %}
                                                                 {% if  no.nota4 == '1' or no.nota4 == '2' or no.nota4 == '3' or no.nota4 == '4' or no.nota4 == '5' or  no.nota4 == '6' or no.nota4 == '7' or no.nota4 == '8' or no.nota4 == '9' or no.nota4 == '10' or no.nota4 == '01' or no.nota4 == '02' or no.nota4 == '03' or no.nota4 == '04' or no.nota4 == '05' or  no.nota4 == '06' or no.nota4 == '07' or no.nota4 == '08' or no.nota4 == '09' or no.nota4 == '10'%}
                                                                 C
                                                             {% else %}
@@ -291,13 +292,13 @@
                                                                     {% else %}
                                                                         {% if no.nota4 <= '20' %}
                                                                             AD
-                                                                        {% else %}
+                                                                        {% else %} {% endcomment %}
                                                                             {{no.nota4}}
-                                                                        {%endif%}
+                                                                        {% comment %} {%endif%}
                                                                     {% endif %}
                                                                 {% endif %}
                                                             {% endif %}
-                                                        {% endif %}
+                                                        {% endif %} {% endcomment %}
                                                     {% comment %} {% endif %} {% endcomment %}
                                                     </td>
                                                 <!-- END CUARTO BIMESTRE -->
