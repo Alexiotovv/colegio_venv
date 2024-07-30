@@ -1,0 +1,57 @@
+<div class="modal fade" id="modalEditarDocente" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Docente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="formEditarDocente" action="{% url 'app_docente_update' %}"> {% csrf_token %}
+					<div class="row">
+						<div class="col-md-3">
+							<input type="text" name="edit_docente_id" id="edit_docente_id" hidden readonly>
+							<label>Dni</label>
+                            <input type="text" class="form-control form-control-sm" id="dni" name="dni">
+						</div>
+						<div class="col-md-3">
+							<label>Dirección</label>
+                            <input type="text" class="form-control form-control-sm" id="direccion" name="direccion">
+						</div>
+                        <!-- <div class="col-md-3">
+							<label>Fecha Nac-</label>
+                            <input type="date" value="2024-1-1" class="form-control form-control-sm" id="fechanacimiento" name="fechanacimiento">
+						</div> -->
+                        <div class="col-md-3">
+							<label>Teléfono</label>
+                            <input type="text" class="form-control form-control-sm" id="telefono" name="telefono">
+						</div>
+                        <div class="col-md-3">
+							<label>Sexo</label>
+                            <select name="sexo" id="sexo" class="form-select form-select-sm">
+                                <option value="M">M</option>
+                                <option value="F">F</option>
+                            </select>
+						</div>
+                        <div class="col-md-6">
+							<label>Seleccione Aula de Tutor</label>
+                            <select name="tutorgrado" id="tutorgrado" class="single-select single-select-sm">
+                                <option value="">----</option>
+                                {% for aula in lista_aulas %}
+                                    <option value="{{aula.id}}">{{aula}}</option>
+                                {% endfor %}
+                            </select>
+                            
+						</div>
+                        
+
+					</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success btn-sm"  value="Guardar">Guardar Docente</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </form>
+
+    	</div>
+	</div>
+</div>

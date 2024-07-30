@@ -14,9 +14,6 @@ class DocenteCurso(models.Model):
 		# cadena = "{0} {1} {2}"
 		# return cadena.format(self.Docente.User.first_name,self.Docente.User.last_name,self.Curso.Nombre)
 		return f"{self.Curso.Nombre} | {self.Aulas}"
-			# 
-			# 
-			# "
 
 	def __str__ (self):
 		return self.DocenteyCurso()

@@ -46,22 +46,27 @@
         {% for comp in lista_compe %}
         <tr class="class-default">
           <td>
-            {{ alu.Alumno.ApellidoPaterno }} {{ alu.Alumno.ApellidoMaterno }} {{
-            alu.Alumno.Nombres }}
+            {{ alu.Alumno.ApellidoPaterno }} {{ alu.Alumno.ApellidoMaterno }} {{alu.Alumno.Nombres }}
           </td>
           <td>{{ comp.Competencias.nombre_competencia }}</td>
           <td>
             {% ifequal nivel 'SEC' %} 
-                <input maxlength="230" size="90" type="text" name="{{ comp.Competencias.id }}" id="{{alu.id}}{{ comp.id }}f1" class="form-control" placeholder="Ej. A,B,C etc" {% ifequal comp.Competencias.nombre_competencia 'ORDEN DE MÉRITO' %} onchange="valida_datos_sec('{{alu.id}}{{ comp.id }}f1','ORDEN DE MÉRITO');" {%else%} onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');" {% endifequal%} {%ifequal comp.Curso.Tipo 'DEL PADRE DE FAMILIA'%} list="opciones">
-            <datalist id="opciones">
-              <option value="SIEMPRE"></option>
-              <option value="CASI SIEMPRE"></option>
-              <option value="ALGUNAS VECES"></option>
-              <option value="NUNCA"></option>
-              <option value="TRAS"></option>
-            </datalist>
+                <input maxlength="230" size="90" type="text" name="{{ comp.Competencias.id }}" id="{{alu.id}}{{ comp.id }}f1" class="form-control" placeholder="Ej. A,B,C etc" {% ifequal comp.Competencias.nombre_competencia 'ORDEN DE MÉRITO' %} onchange="valida_datos_sec('{{alu.id}}{{ comp.id }}f1','ORDEN DE MÉRITO');" {%else%} onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');" 
+            {% endifequal%} 
+            {%ifequal comp.Curso.Tipo 'DEL PADRE DE FAMILIA'%} list="opciones">
+                <datalist id="opciones">
+                  <option value="SIEMPRE"></option>
+                  <option value="CASI SIEMPRE"></option>
+                  <option value="ALGUNAS VECES"></option>
+                  <option value="NUNCA"></option>
+                  <option value="TRAS"></option>
+                </datalist>
 
-            {%endifequal%} {% endifequal %} {% if nivel == 'PRIM' %} <input maxlength="230" size="90" type="text" name="{{ comp.Competencias.id }}" id="{{alu.id}}{{ comp.id }}f1" class="form-control" {%ifequal comp.Competencias.nombre_competencia 'DEL PADRE DE FAMILIA'%} onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','DEL PADRE DE FAMILIA');" {%else%} onchange="valida_datos_prim('{{alu.id}}{{comp.id }}f1','{{comp.Curso.Tipo}}');" {%endifequal%} onkeyup="activarmodonext('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');" placeholder="Ej. A,B,C, etc" {%ifequal comp.Curso.Tipo 'DEL PADRE DE FAMILIA'%} list="opciones">
+            {%endifequal%}
+
+            {% endifequal %} 
+            {% if nivel == 'PRIM' %} <input maxlength="230" size="90" type="text" name="{{ comp.Competencias.id }}" id="{{alu.id}}{{ comp.id }}f1" class="form-control" 
+              {%ifequal comp.Competencias.nombre_competencia 'DEL PADRE DE FAMILIA'%} onchange="valida_datos_prim('{{alu.id}}{{ comp.id }}f1','DEL PADRE DE FAMILIA');" {%else%} onchange="valida_datos_prim('{{alu.id}}{{comp.id }}f1','{{comp.Curso.Tipo}}');" {%endifequal%} onkeyup="activarmodonext('{{alu.id}}{{ comp.id }}f1','{{comp.Curso.Tipo}}');" placeholder="Ej. A,B,C, etc" {%ifequal comp.Curso.Tipo 'DEL PADRE DE FAMILIA'%} list="opciones">
             <datalist id="opciones">
               <option value="SIEMPRE"></option>
               <option value="CASI SIEMPRE"></option>
@@ -151,10 +156,7 @@
                 <td>{{ forloop.counter }}</td>
                 {% for comp in lista_compe %}
                 <tr class="class-default">
-                  <td>
-                    {{ alu.Alumno.ApellidoPaterno }} {{
-                    alu.Alumno.ApellidoMaterno }} {{ alu.Alumno.Nombres }}
-                  </td>
+                  <td> {{ alu.Alumno.ApellidoPaterno }} {{ alu.Alumno.ApellidoMaterno }} {{ alu.Alumno.Nombres }} </td>
                   <td>{{ comp.Competencias.nombre_competencia }}</td>
                   <td>
                     <textarea

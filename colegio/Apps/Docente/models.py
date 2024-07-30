@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from colegio.Apps.Aulas.models import Aulas
 
 class Docente (models.Model):
     User = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -15,6 +16,7 @@ class Docente (models.Model):
     TutorGrado=models.CharField(max_length=10,choices=TUTOR_GRADOS,default='-')
     TUTOR_SECCIONES=(('-','-'),('A','A'),('B','B'),('C','C'),('D','D'),('E','E'),('F','F'),('G','G'))
     TutorSeccion=models.CharField(max_length=10,choices=TUTOR_SECCIONES,default='-')
+    Aula=models.ForeignKey(Aulas,null=True,blank=True, verbose_name=("Aulas"), on_delete=models.CASCADE)
     def NombreCompleto(self):
         cadena = "{0} {1}"
         return cadena.format(self.User.first_name,self.User.last_name)

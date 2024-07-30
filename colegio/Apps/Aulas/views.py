@@ -11,10 +11,10 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 def index(request):
-    anos=AnoAcademico.objects.all().order_by('-id')
-    aulas = Aulas.objects.all()
-    niveles=Nivel.objects.all()
-    grados=Grado.objects.all()
+    anos=AnoAcademico.objects.filter(Activo=True)
+    aulas = Aulas.objects.filter(AnoAcademico__Activo=True)
+    niveles=Nivel.objects.filter(AnoAcademico__Activo=True)
+    grados=Grado.objects.filter(AnoAcademico__Activo=True)
     secciones=Seccion.objects.all()
     message = request.GET.get('message', None)
 
@@ -82,16 +82,18 @@ def update(request):
 def destroy(request):
     if request.method=='POST':
         id_aula=request.POST.get('id_registro_eliminar')
+        existe_registros=False
+        existen_registros_docentecurso=DocenteCurso.objects.filter(Aulas_id=id_aula).exists() #Aulas
+        existen_registros_docente=Docente.objects.filter(Aula_id=id_aula).exists() #Tutor
         
-        print(id_aula)
-
-        existen_registros=DocenteCurso.objects.filter(Aulas_id=id_aula).exists()
-        if existen_registros:
+        if existen_registros_docentecurso or existen_registros_docente:
+            existe_registros=True
+        
+        if existe_registros:
             return redirect('/index/aulas/?message=No se puede Eliminar este aula, contiene datos')
         else:
             Aulas.objects.get(id=id_aula).delete()
-
-        return redirect('/index/aulas/?message=Aula eliminada correctamente')
+            return redirect('/index/aulas/?message=Aula eliminada correctamente')
 
 def edit(request,id_aula):
     aula = Aulas.objects.get(id=id_aula)

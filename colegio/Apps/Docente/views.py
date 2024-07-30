@@ -1,13 +1,18 @@
+import json
 from sqlite3 import Cursor
+from urllib import response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import ListView, UpdateView, DeleteView, DetailView
 from colegio.Apps.Docente.forms import DocenteForm
 from colegio.Apps.Docente.models import Docente
+from colegio.Apps.DocenteCurso.models import DocenteCurso
 from colegio.Apps.Curso.models import Curso
+from colegio.Apps.Notas.models import NotasComp
 from colegio.Apps.Aulas.models import Aulas
 from django.contrib.auth.models import User
-
+from django.http import JsonResponse
+from django.forms.models import model_to_dict
 
 def DocenteList (request):
 	message = request.GET.get('message', None)
@@ -16,12 +21,34 @@ def DocenteList (request):
 	docentes = Docente.objects.prefetch_related('docente_id').all()	
 	lista_cursos = Curso.objects.all()
 	lista_aulas = Aulas.objects.filter(AnoAcademico__Activo=True)
+	
 	return render(request,'docente/listar_docentes.html',{
 		'docentes':docentes,
 		'lista_cursos':lista_cursos,
 		'lista_aulas':lista_aulas,
 		'message':message,
 		'status':status})
+def DocenteEdit(request,id_docente):
+	docente=Docente.objects.get(id=id_docente)
+	return JsonResponse(model_to_dict(docente),safe=False)
+
+def DocenteUpdates(request):
+	if request.method=='POST':
+		#primero quitar aula/tutor a docente que contiene el aula
+		if request.POST.get('tutorgrado')!='':
+			Docente.objects.filter(Aula_id=request.POST.get('tutorgrado')).update(Aula_id=None)
+			
+		id_docente=request.POST.get('edit_docente_id')
+		docente=Docente.objects.get(id=id_docente)
+		docente.Aula_id=request.POST.get('tutorgrado')
+		docente.Direccion=request.POST.get('direccion')
+		# docente.FechaNacimiento=request.POST.get('fechanacimiento')
+		docente.Sexo=request.POST.get('sexo')
+		docente.Telefono=request.POST.get('telefono')
+		
+		docente.save()
+		return redirect('/docentes/listar/?message=Registro Actualizado'+'&status=success')
+		
 
 def DocenteNew (request,id_user):
 	if request.method == 'POST':
@@ -157,10 +184,18 @@ def DocenteUpdate(request,id_docente):
 	contexto = {'docente':docente,'form':form}
 	return render(request,'docente/update_docente.html',contexto)
 
-class DocenteDelete (DeleteView):
-	model = Docente
-	template_name = 'docente/delete_docente.html'
-	success_url = '/docentes/listar/'
+def DocenteDelete (request):
+	if request.method=='POST':
+		id_docente=request.POST.get('id_registro_eliminar')
+
+		existe_datos_docentecurso=DocenteCurso.objects.filter(Docente_id=id_docente).exists()
+		existe_datos_notascomp=NotasComp.objects.filter(Docente_id=id_docente).exists()
+		if existe_datos_docentecurso or existe_datos_notascomp:
+			return redirect('/docentes/listar/?message=No se puede Eliminar, contiene datos vinculados'+'&status=danger')
+		
+		docente = Docente.objects.get(id=id_docente)
+		docente.delete()
+		return redirect('/docentes/listar/?message=Profesor Eliminado'+'&status=success')
 
 class DocenteDetalle (DetailView):
 	model = Docente

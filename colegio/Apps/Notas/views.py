@@ -298,7 +298,8 @@ def NotasNuevoComp(request):
 	ids_guardados = NotasComp.objects.filter(DocenteCurso_id__in=asignaciones_ids).values_list('DocenteCurso_id', flat=True).distinct()
 	
 	ids_guardados_list = ids_guardados
-	print(ids_guardados_list)
+	
+
 	#este contexto es para el ELSE
 	contexto2 = {'asignaciones':asignaciones,'doce':doce,'paca':paca,'ano':ano,'curso_list':curso_list,'ids_guardados_list':ids_guardados_list}#,'grados_list':grados_list,'secciones_list':secciones_list
 	if request.method=='POST':

@@ -55,7 +55,16 @@ def ImprimirAvancesxAlumno(request):
         result = Curso.objects.raw('SELECT 1 as id,ccur."Curso_id" as IDCURSO,Count(*)-1 as NUM_COMPE FROM "Competencias_competenciacurso" as ccur GROUP BY ccur."Curso_id" ORDER BY ccur."Curso_id"')
 
         notas=AvanceNotasComp.objects.filter(PAcademico_id=paca,Matricula__AnoAcademico__Ano=ano,Matricula__Grado=gradonivel,Matricula__Seccion=seccion).order_by('Curso__Orden','Competencias__Orden')
-        tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        
+        tutor=Docente.objects.filter(
+                                    Aula__AnoAcademico__Activo=True, 
+                                    Aula__Nivel__Nombre__startswith=nivel[:3], 
+                                    Aula__Grado__Nombre=grado, 
+                                    Aula__Seccion__Nombre=seccion).first()
+        if not tutor:
+            tutor='sin tutor asignado'
+        #tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+
         matricula = Matricula.objects.filter(id=idMat,Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano).order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
 
         contexto={'grado':grado,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'nombrepaca':nombrepaca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'notas':notas}#para libreta de avance
@@ -76,7 +85,7 @@ def ImprimirLibretasxAlumno(request):
         nombrepaca=PAcademico.objects.get(id=paca)
         idMat=request.POST.get("idMat")
         nivel=str(gradonivel)[1:len(gradonivel)] #extrae solo PRIM
-        grado=str(gradonivel)[0:1] #extrae solo PRI
+        grado=str(gradonivel)[0:1] #extrae solo el primer caracter 1
 
         nivelcorto=''
         if nivel=='SEC':
@@ -87,7 +96,17 @@ def ImprimirLibretasxAlumno(request):
             nivelcorto='PRIM'
 
         result = Curso.objects.raw('SELECT 1 as id,ccur."Curso_id" as IDCURSO,Count(*)-1 as NUM_COMPE FROM "Competencias_competenciacurso" as ccur GROUP BY ccur."Curso_id" ORDER BY ccur."Curso_id"')
-        tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        
+        tutor=Docente.objects.filter(
+                                    Aula__AnoAcademico__Activo=True, 
+                                    Aula__Nivel__Nombre__startswith=nivel[:3], 
+                                    Aula__Grado__Nombre=grado, 
+                                    Aula__Seccion__Nombre=seccion).first()
+        if not tutor:
+            tutor='sin tutor asignado'
+
+        #tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+
         matricula = Matricula.objects.filter(id=idMat,Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano).order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         alumnos_idmat= Matricula.objects.filter(id=idMat,Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano).values('id','Grado').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         #Envia solamente para la apreciación del tutor
@@ -156,11 +175,6 @@ def ImprimirLibretasxAlumno(request):
                     if n['competencia']==n4['competencia'] and  n['curso']==n4['curso'] and n['matricula']==n4['matricula']:
                         n['nota4']=n4['nota']
 
-        ########solo se usa para la situación final
-        # SitFinalbim4="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia=%s"
-        # cursor.execute(SitFinalbim4,[ano,gradonivel,seccion,nivelcorto,'CALIFICATIVO DE ÁREA'])
-        # SitFinalnotas4 = dictfetchall(cursor)
-        #######end para situacion final
 
         ########solo se usa para situacion final 2023 Modificado 19/dic/2023
         SitFinalbim4_2023="select n4.matricula,n4.nombrecurso,n4.nota,n4.tipocurso from notas_primaria_ivbimestre n4 WHERE n4.Ano=%s and n4.grado=%s and n4.seccion=%s and n4.nivelcurso=%s and n4.nombrecompetencia<>%s"
@@ -242,7 +256,15 @@ def ImprimirAvanceNotasPrimaria(request):
         for d in dnis:
             data.append(d["Dni"]) 
         notas=AvanceNotasComp.objects.filter(PAcademico=paca,Matricula__AnoAcademico__Ano=ano,Matricula__Grado=gradonivel,Matricula__Seccion=seccion).order_by('Curso__Orden','Competencias__Orden')
-        tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        
+        tutor=Docente.objects.filter(
+                                    Aula__AnoAcademico__Activo=True, 
+                                    Aula__Nivel__Nombre__startswith=nivel[:3], 
+                                    Aula__Grado__Nombre=grado, 
+                                    Aula__Seccion__Nombre=seccion).first()
+        if not tutor:
+            tutor='sin tutor asignado'
+        #tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
         if filtrado=="SI":
             matricula = Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano,Alumno__Estado='A',Alumno__DNI__in=data).order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         else:
@@ -282,7 +304,16 @@ def ImprimirAvanceNotasSecundaria(request):
         for d in dnis:
             data.append(d["Dni"]) 
         notas=AvanceNotasComp.objects.filter(PAcademico=paca,Matricula__AnoAcademico__Ano=ano,Matricula__Grado=gradonivel,Matricula__Seccion=seccion).order_by('Curso__Orden','Competencias__Orden')
-        tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        
+        tutor=Docente.objects.filter(
+                                    Aula__AnoAcademico__Activo=True, 
+                                    Aula__Nivel__Nombre__startswith=nivel[:3], 
+                                    Aula__Grado__Nombre=grado, 
+                                    Aula__Seccion__Nombre=seccion).first()
+        if not tutor:
+            tutor='sin tutor asignado'
+        #tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        
         if filtrado=="SI":
             matricula = Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano,Alumno__Estado='A',Alumno__DNI__in=data).order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         else:
@@ -318,7 +349,15 @@ def ImprimirNotasPrimaria(request):
             nivelcorto='SEC'
 
         result = Curso.objects.raw('SELECT 1 as id,ccur."Curso_id" as IDCURSO,Count(*)-1 as NUM_COMPE FROM "Competencias_competenciacurso" as ccur GROUP BY ccur."Curso_id" ORDER BY ccur."Curso_id"')
-        tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        tutor=Docente.objects.filter(
+                                    Aula__AnoAcademico__Activo=True, 
+                                    Aula__Nivel__Nombre__startswith=nivel[:3], 
+                                    Aula__Grado__Nombre=grado, 
+                                    Aula__Seccion__Nombre=seccion).first()
+        if not tutor:
+            tutor='sin tutor asignado'
+
+        #tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
         matricula = Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano,Alumno__Estado='A').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         alumnos_idmat= Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano).values('id','Grado').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
 
@@ -382,9 +421,7 @@ def ImprimirNotasPrimaria(request):
 
         #SitFinal=SituacionFinalPrimaria(gradonivel,alumnos_idmat,paca,SitFinalnotas4)
         SitFinal=SituacionFinalPrimaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
-        for n in notas:
-            print(n.notas2)
-
+        
         contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta de avance
         return render(request,'libretas/LibretaPrimaria.html',contexto2)
     else:
@@ -404,7 +441,8 @@ def ImprimirNotasSecundaria(request):
         paca=int(paca)
         nombrepaca=PAcademico.objects.get(id=paca)
         nivel=str(gradonivel)[1:len(gradonivel)] #extrae solo PRIM
-        grado=str(gradonivel)[0:1] #extrae solo PRIM
+        grado=str(gradonivel)[0:1] #extrae solo numero
+
         nivelcorto=''
         if nivel=='SEC':
             nivel='SECUNDARIO'
@@ -415,7 +453,16 @@ def ImprimirNotasSecundaria(request):
 
         result = Curso.objects.raw('SELECT 1 as id,ccur."Curso_id" as IDCURSO,Count(*)-1 as NUM_COMPE FROM "Competencias_competenciacurso" as ccur GROUP BY ccur."Curso_id" ORDER BY ccur."Curso_id"')
         
-        tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+        
+        tutor=Docente.objects.filter(
+                                    Aula__AnoAcademico__Activo=True, 
+                                    Aula__Nivel__Nombre__startswith=nivel[:3], 
+                                    Aula__Grado__Nombre=grado, 
+                                    Aula__Seccion__Nombre=seccion).first()
+        if not tutor:
+            tutor='sin tutor asignado'
+        #tutor=Docente.objects.filter(TutorGrado=gradonivel,TutorSeccion=seccion).last()
+
         matricula = Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano,Alumno__Estado='A').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         alumnos_idmat= Matricula.objects.filter(Grado=gradonivel,Seccion=seccion,AnoAcademico__Ano=ano).values('id','Grado').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
         #Envia solamente para la apreciación del tutor
@@ -475,14 +522,6 @@ def ImprimirNotasSecundaria(request):
         SitFinalnotas4_2023 = dictfetchall(cursor)
         #######end para situacion final
         
-        ##Para promedio Final de 5Sec
-        #if gradonivel=='1SEC' or gradonivel=='2SEC' or gradonivel=='3SEC' or gradonivel=='4SEC' or gradonivel=='5SEC' and paca==5:
-        #     prom_quinto= CaliFinalSec(paca,notas)#se agrego la columna promedio en notas
-        #     notas=prom_quinto
-        #     SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,notas,gradonivel)
-        #     SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
-        # else:
-            # SitFinal=SituacionFinalSecundaria(alumnos_idmat,paca,SitFinalnotas4,gradonivel)
         SitFinal=SituacionFinalSecundaria_2023(alumnos_idmat,paca,SitFinalnotas4_2023,gradonivel)
 
         contexto2={'SitFinal':SitFinal,'nombrepaca':nombrepaca,'apreciaciones':apreciaciones,'notas':notas,'result':result,'tutor':tutor,'matricula':matricula,'nivel':nivel,'paca':paca,'ano':ano,'gradonivel':gradonivel,'seccion':seccion,'grado':grado,'nivelcorto':nivelcorto}#para libreta
