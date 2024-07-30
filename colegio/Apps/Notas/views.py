@@ -246,8 +246,11 @@ def ConsolidadoNotas(request):
 		######con matriculas se obtiene todos los alumnos y se guarda en mtriculas de ese grado filtrado por ano,gradonivel, seccion
 		####tambien se obtiene consolidado_notas de NotasComp
 		matriculas=Matricula.objects.filter(AnoAcademico__Ano=ano,Grado=gradonivel,Seccion=seccion,Alumno__Estado='A').order_by('Alumno__ApellidoPaterno','Alumno__ApellidoMaterno','Alumno__Nombres')
-		consolidado_notas=NotasComp.objects.filter(Matricula__AnoAcademico__Ano=ano,
-		Matricula__Grado=gradonivel,Matricula__Seccion=seccion,PAcademico=paca)
+		consolidado_notas=NotasComp.objects.filter(
+											Matricula__AnoAcademico__Ano=ano,
+											Matricula__Grado=gradonivel,
+											Matricula__Seccion=seccion,
+											PAcademico=paca)
 		cursos= CompetenciaCurso.objects.filter(Curso__Nivel=nivel).exclude(Curso__Tipo='--').order_by('Curso__Orden','Competencias__Orden')
 		
 		###Mi funcion estrella que hace la granputa colocacion en el excel
@@ -298,7 +301,7 @@ def NotasNuevoComp(request):
 	ids_guardados = NotasComp.objects.filter(DocenteCurso_id__in=asignaciones_ids).values_list('DocenteCurso_id', flat=True).distinct()
 	
 	ids_guardados_list = ids_guardados
-	print(ids_guardados_list)
+	
 	#este contexto es para el ELSE
 	contexto2 = {'asignaciones':asignaciones,'doce':doce,'paca':paca,'ano':ano,'curso_list':curso_list,'ids_guardados_list':ids_guardados_list}#,'grados_list':grados_list,'secciones_list':secciones_list
 	if request.method=='POST':
@@ -717,6 +720,7 @@ def EstadoValor(obj):
 
 def InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,periodo,cursos,registrar_orden_merito,idusuario,paca):
 	#LIMPIANDO TODAS LAS CELDAS################
+	
 	if str(nivel)=='SEC':
 		Ruta = "/var/www/vhosts/colegio_venv/colegio/static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx"
 		#Ruta = "static/files/PLANTILLA_LIBRETA_SECUNDARIA.xlsx"
@@ -769,7 +773,6 @@ def InsertaNotasEnExcel(consolidado_notas,matriculas,nivel,gradonivel,seccion,pe
 							Hoja1.cell(row=fila,column=colcur,value=valor)	
 								
 						if obj.Curso.Nombre==Hoja1.cell(row=4,column=colcur).value and obj.Competencias.nombre_competencia==Hoja1.cell(row=5,column=colcur).value:##para saber si cambia curso
-							# if colcur in columnas_notas:#pregunta si las notas que va calcular corresponden a las columnas
 							
 							letras_competencias.append(obj.Nota)
 							
@@ -1099,7 +1102,8 @@ def funcion_registrar_orden_merito(ruta_notas,idusuario,paca):
 
 	df_notas['Curso_id']=18
 	df_notas['Competencias_id']=88
-	df_notas['Docente_id']=idusuario
+	docente=Docente.objects.filter(User_id=idusuario).first()
+	df_notas['Docente_id']=docente.id
 	df_notas['PAcademico_id']=paca
 
 	df_nuevo=df_notas[['Matricula_id','Curso_id','Competencias_id','Docente_id','PAcademico_id','Nota']]
