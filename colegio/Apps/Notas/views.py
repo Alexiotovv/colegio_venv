@@ -1100,7 +1100,8 @@ def funcion_registrar_orden_merito(ruta_notas,idusuario,paca):
 
 	df_notas['Curso_id']=18
 	df_notas['Competencias_id']=88
-	df_notas['Docente_id']=idusuario
+	docente=Docente.objects.filter(User_id=idusuario).first()
+	df_notas['Docente_id']=docente.id
 	df_notas['PAcademico_id']=paca
 
 	df_nuevo=df_notas[['Matricula_id','Curso_id','Competencias_id','Docente_id','PAcademico_id','Nota']]
